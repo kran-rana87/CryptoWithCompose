@@ -6,5 +6,6 @@ object Constants {
     const val DUMMY_VALUE3 = "https://min-api.cryptocompare.com"
     const val DUMMY_VALUE4 = "https://min-api.cryptocompare.com"
     const val DUMMY_VALUE5 = "https://min-api.cryptocompare.com"
+    const val CRYPTO_BASE_Master1 = "https://min-api.cryptocompare.com"
 
 }
