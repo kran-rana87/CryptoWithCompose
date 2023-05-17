@@ -1,18 +1,16 @@
-package com.karan.coingecko.demo.data
+package com.karan.coingecko.demo.di
 
 import Constants
 import com.google.gson.Gson
 import com.karan.coingecko.demo.data.network.NetworkService
-import com.karan.coingecko.demo.domain.models.DashboardResponse
+import com.karan.coingecko.demo.data.network.RequestInterceptor
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
 import okhttp3.OkHttpClient
-import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
-import retrofit2.http.GET
 import java.util.concurrent.TimeUnit
 import javax.inject.Singleton
 
@@ -37,13 +35,18 @@ class NetworkModule {
 
     @Provides
     @Singleton
-    fun provideOkHttpClient(): OkHttpClient {
+    fun provideOkHttpClient(requestInterceptor: RequestInterceptor): OkHttpClient {
         val builder = OkHttpClient.Builder()
             .connectTimeout(60, TimeUnit.SECONDS)
             .writeTimeout(60, TimeUnit.SECONDS)
             .readTimeout(60, TimeUnit.SECONDS)
+            .addInterceptor(requestInterceptor)
         return builder.build()
     }
+
+    @Provides
+    @Singleton
+    fun provideInterceptor() = RequestInterceptor()
 
     @Provides
     @Singleton

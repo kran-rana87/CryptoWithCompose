@@ -10,7 +10,7 @@ import com.karan.coingecko.demo.navigation.CoinGeckoNavigationActions
 fun NavGraphBuilder.authGraph(navigationAction: CoinGeckoNavigationActions) {
     navigation(
         startDestination = AuthScreen.SignIn.route,
-        route = CoinGeckoDestinations.AUTH_ROUTE
+        route = CoinGeckoDestinations.AUTH_ROUTE_GRAPH
     ) {
         composable(AuthScreen.SignIn.route) {
             LoginScreen(
@@ -21,6 +21,5 @@ fun NavGraphBuilder.authGraph(navigationAction: CoinGeckoNavigationActions) {
         }
         composable(AuthScreen.SignUp.route) { Signup() }
         composable(AuthScreen.ForgotPassword.route) { ForgotPassword() }
-
     }
 }
