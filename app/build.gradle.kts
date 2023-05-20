@@ -94,6 +94,7 @@ dependencies {
     implementation(libs.compose.ui.tooling)
     implementation(libs.compose.activity)
     implementation(libs.compose.meterialicons)
+    implementation("androidx.datastore:datastore-preferences:1.0.0")
 
     kapt(libs.hilt.ext.compiler)
     testImplementation(libs.junit)

@@ -7,17 +7,15 @@ import com.karan.coingecko.demo.ui.splash.SplashScreen
 
 object CoinGeckoDestinations {
     const val AUTH_ROUTE_GRAPH = "login_route"
-    const val SPLASH_ROUTE_GRAPH = "splash_route"
     const val DASHBOARD_ROUTE_GRAPH = "dashboard_route"
+    const val Top_COINS_GRAPH = "top_coins_route"
 }
 
 
 class CoinGeckoNavigationActions(navController: NavHostController) {
     val navigateTeLogin: () -> Unit = {
         navController.navigate(AuthScreen.SignIn.route) {
-            popUpTo(SplashScreen.Splash.route) {
-                inclusive = true
-            }
+            popUpTo(0)
         }
     }
 

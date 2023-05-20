@@ -9,7 +9,16 @@ import com.karan.coingecko.demo.navigation.CoinGeckoNavigationActions
 
 fun NavGraphBuilder.topCoinGraph(
     navigationAction: CoinGeckoNavigationActions,
-    navHostController: NavHostController
+    navHostController: NavHostController,
 ) {
-    composable(DashboardScreen.TopCoins.route) { topCoins() }
+    navigation(
+        startDestination = DashboardScreen.TopCoins.route,
+        route = CoinGeckoDestinations.Top_COINS_GRAPH,
+    ) {
+        composable(DashboardScreen.TopCoins.route) {
+            topCoins(
+                navigationActions = navigationAction
+            )
+        }
+    }
 }

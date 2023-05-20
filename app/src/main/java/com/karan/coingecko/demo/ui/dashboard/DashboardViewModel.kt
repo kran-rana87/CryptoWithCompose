@@ -1,7 +1,9 @@
 package com.karan.coingecko.demo.ui.dashboard
 
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewModelScope
+import com.karan.coingecko.demo.data.impl.StorageRepositoryImpl
 import com.karan.coingecko.demo.domain.models.DashboardUIData
 import com.karan.coingecko.demo.domain.repository.DashboardRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -16,8 +18,17 @@ import kotlinx.coroutines.flow.stateIn
 import javax.inject.Inject
 
 @HiltViewModel
-class DashboardViewModel @Inject constructor(private val dashboardRepo: DashboardRepository) :
+class DashboardViewModel @Inject constructor(
+    private val dashboardRepo: DashboardRepository,
+    storageRepository: StorageRepositoryImpl
+) :
     ViewModel() {
+    val state = storageRepository.fetchUserState().flowOn(Dispatchers.IO).stateIn(
+        scope = viewModelScope,
+        started = SharingStarted.Lazily,
+        initialValue = false
+    )
+
     val coinData: StateFlow<DashboardUIState> =
         coinData()
             .map(DashboardUIState::Success)

@@ -12,10 +12,10 @@ import com.karan.coingecko.demo.navigation.CoinGeckoNavigationActions
 fun NavGraphBuilder.dashboardGraph(
     navigationAction: CoinGeckoNavigationActions
 ) {
-    navigation(
+/*    navigation(
         startDestination = DashboardScreen.Dashboard.route,
         route = CoinGeckoDestinations.DASHBOARD_ROUTE_GRAPH
     ) {
         composable(DashboardScreen.Dashboard.route) { dashboard(navigationActions = navigationAction) }
-    }
+    }*/
 }

@@ -26,6 +26,7 @@ import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.hilt.navigation.compose.hiltViewModel
 import com.karan.coingecko.demo.ui.theme.Purple700
 
 sealed class AuthScreen(val route: String) {
@@ -39,7 +40,8 @@ sealed class AuthScreen(val route: String) {
 fun LoginScreen(
     navigateToSignUp: () -> Unit,
     navigateToForgotPassword: () -> Unit,
-    navigateToDashboard: () -> Unit
+    navigateToDashboard: () -> Unit,
+    loginViewModel: LoginViewModel = hiltViewModel()
 ) {
     Box(modifier = Modifier.fillMaxSize()) {
         ClickableText(
@@ -82,7 +84,7 @@ fun LoginScreen(
         Spacer(modifier = Modifier.height(20.dp))
         Surface(modifier = Modifier.padding(40.dp, 0.dp, 40.dp, 0.dp)) {
             Button(
-                onClick = { navigateToDashboard() },
+                onClick = { loginViewModel.login() },
                 shape = RoundedCornerShape(50.dp),
                 modifier = Modifier
                     .fillMaxWidth()

@@ -11,16 +11,8 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.navigation.NavGraph.Companion.findStartDestination
 import androidx.navigation.NavHostController
-import androidx.navigation.compose.NavHost
-import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
-import androidx.navigation.compose.navigation
-import androidx.navigation.compose.rememberNavController
-import com.karan.coingecko.demo.navigation.CoinGeckoDestinations
 import com.karan.coingecko.demo.ui.dashboard.DashboardScreen
-import com.karan.coingecko.demo.ui.dashboard.favourites
-import com.karan.coingecko.demo.ui.dashboard.settings
-import com.karan.coingecko.demo.ui.dashboard.topCoins
 
 @Composable
 fun BottomTabBar(navController: NavHostController) {

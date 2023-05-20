@@ -7,7 +7,7 @@ import com.karan.coingecko.demo.navigation.CoinGeckoDestinations
 import com.karan.coingecko.demo.navigation.CoinGeckoNavigationActions
 
 fun NavGraphBuilder.splashScreen(navigationAction: CoinGeckoNavigationActions) {
-    navigation(
+/*    navigation(
         startDestination = SplashScreen.Splash.route,
         route = CoinGeckoDestinations.SPLASH_ROUTE_GRAPH
     )
@@ -17,5 +17,5 @@ fun NavGraphBuilder.splashScreen(navigationAction: CoinGeckoNavigationActions) {
                 navigationAction.navigateTeLogin()
             }
         })
-    }
+    }*/
 }
