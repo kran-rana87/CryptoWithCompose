@@ -1,4 +1,4 @@
-package com.karan.coingecko.demo.ui.auth
+package com.karan.coingecko.demo.ui.splash
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.fillMaxSize
@@ -11,8 +11,12 @@ import com.karan.flow.demo.R
 import kotlinx.coroutines.delay
 
 
+sealed class SplashScreen(val route: String) {
+    object Splash : SplashScreen("splash")
+
+}
 @Composable
-fun SplashScreen(movetoLogin: () -> Unit) {
+fun Splash(movetoLogin: () -> Unit) {
     Surface(
         modifier = Modifier.fillMaxSize()
     ) {

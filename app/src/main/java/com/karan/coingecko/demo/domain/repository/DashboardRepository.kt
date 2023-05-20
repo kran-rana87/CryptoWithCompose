@@ -1,10 +1,10 @@
 package com.karan.coingecko.demo.domain.repository
 
-import com.karan.coingecko.demo.domain.models.DashboardResponse
+import com.karan.coingecko.demo.data.network.response.CoinResponse
+import com.karan.coingecko.demo.domain.models.DashboardUIData
 import kotlinx.coroutines.flow.Flow
 
 interface DashboardRepository {
-
-    fun getDashboardData(): Flow<DashboardResponse>
+    fun getDashboardData(): Flow<DashboardUIData>
 
 }
