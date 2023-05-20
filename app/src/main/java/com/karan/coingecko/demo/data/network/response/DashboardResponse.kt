@@ -1,13 +1,13 @@
 package com.karan.coingecko.demo.data.network.response
 
-import com.google.gson.annotations.SerializedName
+import kotlinx.serialization.SerialName
 
-
-data class CoinListResponse(@SerializedName("Data") val coinList: List<CoinResponse>)
-
-data class CoinResponse(@SerializedName("CoinInfo") val coinInfoResponse: CoinInfoResponse)
-
+@kotlinx.serialization.Serializable
+data class CoinListResponse(@SerialName("Data") val coinList: List<CoinResponse>)
+@kotlinx.serialization.Serializable
+data class CoinResponse(@SerialName("CoinInfo") val coinInfoResponse: CoinInfoResponse)
+@kotlinx.serialization.Serializable
 data class CoinInfoResponse(
-    @SerializedName("Id") val id: Int,
-    @SerializedName("Name") val name: String,
+    @SerialName("Id") val id: Int,
+    @SerialName("Name") val name: String,
 )
