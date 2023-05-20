@@ -6,9 +6,11 @@ import androidx.navigation.navigation
 import com.karan.coingecko.demo.navigation.CoinGeckoDestinations
 import com.karan.coingecko.demo.navigation.CoinGeckoNavigationActions
 
-
 fun NavGraphBuilder.splashScreen(navigationAction: CoinGeckoNavigationActions) {
-    navigation(startDestination = SplashScreen.Splash.route, route = CoinGeckoDestinations.SPLASH_ROUTE_GRAPH)
+    navigation(
+        startDestination = SplashScreen.Splash.route,
+        route = CoinGeckoDestinations.SPLASH_ROUTE_GRAPH
+    )
     {
         (composable(SplashScreen.Splash.route) {
             Splash {
