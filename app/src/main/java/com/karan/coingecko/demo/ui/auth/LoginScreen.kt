@@ -27,7 +27,31 @@ import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.navigation.NavGraphBuilder
+import androidx.navigation.compose.composable
+import androidx.navigation.navigation
+import com.karan.coingecko.demo.navigation.CoinGeckoGraphs
 import com.karan.coingecko.demo.ui.theme.Purple700
+
+fun NavGraphBuilder.authScreenGraph(
+    navigateToSignUp: () -> Unit,
+    navigateToForgotPassword: () -> Unit,
+) {
+    navigation(
+        startDestination = AuthRoutes.SignIn.route,
+        route = CoinGeckoGraphs.AUTH_ROUTE_GRAPH,
+    ) {
+        composable(AuthRoutes.SignIn.route) {
+            LoginScreen(navigateToSignUp, navigateToForgotPassword)
+        }
+        composable(AuthRoutes.SignUp.route) {
+            Signup()
+        }
+        composable(AuthRoutes.ForgotPassword.route) {
+            ForgotPassword()
+        }
+    }
+}
 
 @Composable
 fun LoginScreen(
@@ -35,65 +59,65 @@ fun LoginScreen(
     navigateToForgotPassword: () -> Unit,
     loginViewModel: LoginViewModel = hiltViewModel()
 ) {
-        Box(modifier = Modifier.fillMaxSize()) {
-            ClickableText(
-                text = AnnotatedString("Sign up here"),
-                modifier = Modifier
-                    .align(Alignment.BottomCenter)
-                    .padding(20.dp),
-                onClick = { navigateToSignUp() },
-                style = TextStyle(
-                    fontSize = 14.sp,
-                    textDecoration = TextDecoration.Underline,
-                    color = Purple700
-                )
-            )
-        }
-        Column(
+    Box(modifier = Modifier.fillMaxSize()) {
+        ClickableText(
+            text = AnnotatedString("Sign up here"),
             modifier = Modifier
-                .padding(20.dp)
-                .fillMaxSize(),
-            verticalArrangement = Arrangement.Center,
-            horizontalAlignment = Alignment.CenterHorizontally
-        ) {
-
-            Text(text = "Login", style = TextStyle(fontSize = 40.sp, fontFamily = FontFamily.Serif))
-
-            Spacer(modifier = Modifier.height(20.dp))
-            OutlinedTextField(
-                label = { Text(text = "Username") },
-                value = "",
-                onValueChange = { })
-
-            Spacer(modifier = Modifier.height(20.dp))
-            OutlinedTextField(
-                label = { Text(text = "Password") },
-                value = "",
-                visualTransformation = PasswordVisualTransformation(),
-                keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Password),
-                onValueChange = { })
-
-            Spacer(modifier = Modifier.height(20.dp))
-            Surface(modifier = Modifier.padding(40.dp, 0.dp, 40.dp, 0.dp)) {
-                Button(
-                    onClick = { loginViewModel.login() },
-                    shape = RoundedCornerShape(50.dp),
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .height(50.dp)
-                ) {
-                    Text(text = "Login")
-                }
-            }
-
-            Spacer(modifier = Modifier.height(20.dp))
-            ClickableText(
-                text = AnnotatedString("Forgot password?"),
-                onClick = { navigateToForgotPassword() },
-                style = TextStyle(
-                    fontSize = 14.sp,
-                    fontFamily = FontFamily.Default
-                )
+                .align(Alignment.BottomCenter)
+                .padding(20.dp),
+            onClick = { navigateToSignUp() },
+            style = TextStyle(
+                fontSize = 14.sp,
+                textDecoration = TextDecoration.Underline,
+                color = Purple700
             )
+        )
+    }
+    Column(
+        modifier = Modifier
+            .padding(20.dp)
+            .fillMaxSize(),
+        verticalArrangement = Arrangement.Center,
+        horizontalAlignment = Alignment.CenterHorizontally
+    ) {
+
+        Text(text = "Login", style = TextStyle(fontSize = 40.sp, fontFamily = FontFamily.Serif))
+
+        Spacer(modifier = Modifier.height(20.dp))
+        OutlinedTextField(
+            label = { Text(text = "Username") },
+            value = "",
+            onValueChange = { })
+
+        Spacer(modifier = Modifier.height(20.dp))
+        OutlinedTextField(
+            label = { Text(text = "Password") },
+            value = "",
+            visualTransformation = PasswordVisualTransformation(),
+            keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Password),
+            onValueChange = { })
+
+        Spacer(modifier = Modifier.height(20.dp))
+        Surface(modifier = Modifier.padding(40.dp, 0.dp, 40.dp, 0.dp)) {
+            Button(
+                onClick = { loginViewModel.login() },
+                shape = RoundedCornerShape(50.dp),
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .height(50.dp)
+            ) {
+                Text(text = "Login")
+            }
         }
+
+        Spacer(modifier = Modifier.height(20.dp))
+        ClickableText(
+            text = AnnotatedString("Forgot password?"),
+            onClick = { navigateToForgotPassword() },
+            style = TextStyle(
+                fontSize = 14.sp,
+                fontFamily = FontFamily.Default
+            )
+        )
+    }
 }

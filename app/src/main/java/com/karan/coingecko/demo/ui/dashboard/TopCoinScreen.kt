@@ -12,37 +12,22 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import androidx.navigation.NavGraphBuilder
-import androidx.navigation.compose.composable
-import androidx.navigation.navigation
-import com.karan.coingecko.demo.navigation.CoinGeckoGraphs
-import com.karan.coingecko.demo.navigation.CoinGeckoNavigationActions
+import kotlin.reflect.KFunction0
 
-fun NavGraphBuilder.topCoinGraph(
-    navigationAction: CoinGeckoNavigationActions,
-) {
-    navigation(
-        startDestination = TopLevelRoutes.TopCoins.route,
-        route = CoinGeckoGraphs.TOP_COINS_GRAPH,
-    ) {
-        composable(TopLevelRoutes.TopCoins.route) {
-            TopCoinsScreen()
-        }
-    }
+@Composable
+fun TopCoinsRoute(topCoinsViewModel: TopCoinsViewModel = hiltViewModel()) {
+    val coinData by topCoinsViewModel.coinData.collectAsStateWithLifecycle()
+    TopCoinsScreen(state = coinData)
 }
-
 
 @Composable
 @SuppressLint("UnusedMaterialScaffoldPaddingParameter")
 fun TopCoinsScreen(
-    vm: TopCoinsViewModel = hiltViewModel()
+    state: TopCoinsUiState,
 ) {
-
-    val coinData by vm.coinData.collectAsStateWithLifecycle()
-
-    when (coinData) {
+    when (state) {
         is TopCoinsUiState.Success -> {
-            Text(text = "Welcome to Dashboard ${(coinData as TopCoinsUiState.Success).feed.coinListDashboard}")
+            Text(text = "Welcome to Dashboard ${(state as TopCoinsUiState.Success).feed.coinListDashboard}")
         }
         is TopCoinsUiState.Loading -> {
             Column(
