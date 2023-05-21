@@ -1,9 +1,9 @@
 package com.karan.coingecko.demo.di
 
 import com.karan.coingecko.demo.data.impl.AuthRepositoryImpl
-import com.karan.coingecko.demo.data.impl.DashboardRepositoryImpl
+import com.karan.coingecko.demo.data.impl.TopCoinsRepositoryImpl
 import com.karan.coingecko.demo.domain.repository.AuthRepository
-import com.karan.coingecko.demo.domain.repository.DashboardRepository
+import com.karan.coingecko.demo.domain.repository.TopCoinsRepository
 import dagger.Binds
 import dagger.Module
 import dagger.hilt.InstallIn
@@ -17,7 +17,7 @@ abstract class DataModule {
 
     @Binds
     @Singleton
-    abstract fun bindDashboardRepository(dashbaordRepo: DashboardRepositoryImpl): DashboardRepository
+    abstract fun bindDashboardRepository(dashboardRepo: TopCoinsRepositoryImpl): TopCoinsRepository
 
     @Binds
     @Singleton

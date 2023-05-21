@@ -56,6 +56,8 @@ android {
 
 dependencies {
 
+    implementation(project(":data-local"))
+
     implementation(libs.androidx.appcompat)
     implementation(libs.androidx.core)
     implementation(libs.androidx.fragment)
@@ -81,7 +83,6 @@ dependencies {
     implementation(libs.compose.tooling)
 
     implementation(libs.retrofit.client)
-    implementation(libs.retrofit.gson)
     implementation(libs.okhttp.interceptor)
     implementation(libs.okhttp.client)
 
@@ -94,7 +95,6 @@ dependencies {
     implementation(libs.compose.ui.tooling)
     implementation(libs.compose.activity)
     implementation(libs.compose.meterialicons)
-    implementation("androidx.datastore:datastore-preferences:1.0.0")
 
     kapt(libs.hilt.ext.compiler)
     testImplementation(libs.junit)

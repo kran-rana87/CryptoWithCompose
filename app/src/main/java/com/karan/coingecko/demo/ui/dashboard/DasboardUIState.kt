@@ -1,14 +1,14 @@
 package com.karan.coingecko.demo.ui.dashboard
 
-import com.karan.coingecko.demo.domain.models.DashboardUIData
+import com.karan.coingecko.demo.domain.models.TopCoinsUIData
 
-sealed interface DashboardUIState {
-    object Loading : DashboardUIState
+sealed interface TopCoinsUiState {
+    object Loading : TopCoinsUiState
 
     data class Success(
-        val feed: DashboardUIData,
-    ) : DashboardUIState
+        val feed: TopCoinsUIData,
+    ) : TopCoinsUiState
 
-    object Failure : DashboardUIState
+    object Failure : TopCoinsUiState
 
 }

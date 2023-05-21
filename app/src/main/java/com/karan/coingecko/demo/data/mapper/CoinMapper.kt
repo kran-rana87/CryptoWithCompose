@@ -1,14 +1,13 @@
 package com.karan.coingecko.demo.data.mapper
 
 import com.karan.coingecko.demo.data.network.response.CoinListResponse
-import com.karan.coingecko.demo.data.network.response.CoinResponse
 import com.karan.coingecko.demo.domain.models.Coin
-import com.karan.coingecko.demo.domain.models.DashboardUIData
+import com.karan.coingecko.demo.domain.models.TopCoinsUIData
 
 class CoinMapper {
 
-    fun map(from: CoinListResponse): DashboardUIData {
-        return DashboardUIData(coinListDashboard = getCoinList(from))
+    fun map(from: CoinListResponse): TopCoinsUIData {
+        return TopCoinsUIData(coinListDashboard = getCoinList(from))
     }
 
     private fun getCoinList(from: CoinListResponse): List<Coin> {
