@@ -1,38 +1,37 @@
 package com.karan.coingecko.demo.navigation
 
 import androidx.navigation.NavHostController
-import com.karan.coingecko.demo.ui.auth.AuthScreen
-import com.karan.coingecko.demo.ui.dashboard.DashboardScreen
-import com.karan.coingecko.demo.ui.splash.SplashScreen
+import com.karan.coingecko.demo.ui.auth.AuthRoutes
 
-object CoinGeckoDestinations {
+object CoinGeckoGraphs {
     const val AUTH_ROUTE_GRAPH = "login_route"
-    const val SPLASH_ROUTE_GRAPH = "splash_route"
     const val DASHBOARD_ROUTE_GRAPH = "dashboard_route"
+    const val TOP_COINS_GRAPH = "top_coins_route"
+    const val SETTINGS_GRAPH = "settings_graph"
+    const val FAVOURITES_GRAPH = "fav_graph"
+
 }
 
 
 class CoinGeckoNavigationActions(navController: NavHostController) {
     val navigateTeLogin: () -> Unit = {
-        navController.navigate(AuthScreen.SignIn.route) {
-            popUpTo(SplashScreen.Splash.route) {
-                inclusive = true
-            }
+        navController.navigate(AuthRoutes.SignIn.route) {
+            popUpTo(0)
         }
     }
 
     val navigateTeSignUp: () -> Unit = {
-        navController.navigate(AuthScreen.SignUp.route) {
+        navController.navigate(AuthRoutes.SignUp.route) {
         }
     }
 
     val navigateTeForgotPassword: () -> Unit = {
-        navController.navigate(AuthScreen.ForgotPassword.route) {
+        navController.navigate(AuthRoutes.ForgotPassword.route) {
         }
     }
 
     val navigateToDashboard: () -> Unit = {
-        navController.navigate(CoinGeckoDestinations.DASHBOARD_ROUTE_GRAPH) {
+        navController.navigate(CoinGeckoGraphs.DASHBOARD_ROUTE_GRAPH) {
         }
     }
 }
