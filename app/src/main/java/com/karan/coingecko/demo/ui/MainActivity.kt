@@ -9,7 +9,6 @@ import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Surface
 import androidx.compose.ui.Modifier
 import com.karan.coingecko.demo.navigation.CoinGeckoApp
-import com.karan.coingecko.demo.ui.MainViewModel
 import com.karan.coingecko.demo.ui.theme.CoinGeckoTheme
 import dagger.hilt.android.AndroidEntryPoint
 

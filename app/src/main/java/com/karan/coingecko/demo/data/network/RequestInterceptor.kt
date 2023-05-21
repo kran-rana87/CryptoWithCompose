@@ -1,5 +1,6 @@
 package com.karan.coingecko.demo.data.network
 
+import Constants
 import okhttp3.Interceptor
 import okhttp3.Response
 
