@@ -57,6 +57,7 @@ android {
 dependencies {
 
     implementation(project(":data-local"))
+    implementation(project(":domain"))
 
     implementation(libs.androidx.appcompat)
     implementation(libs.androidx.core)
@@ -89,6 +90,9 @@ dependencies {
     implementation(libs.navigation.compose)
     implementation(libs.navigation.fragment)
     implementation(libs.navigation.ui)
+
+    implementation(libs.coil.compose)
+
 
     implementation(libs.compose.material)
     implementation(libs.compose.ui.tooling.preview)

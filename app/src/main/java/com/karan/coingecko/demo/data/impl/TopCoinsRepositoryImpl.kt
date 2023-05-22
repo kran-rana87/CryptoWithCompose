@@ -15,6 +15,8 @@ class TopCoinsRepositoryImpl @Inject constructor(private val networkService: Net
     override fun fetchTopCoins(): Flow<TopCoinsUIData> {
         return flow {
             emit(networkService.getDashboardData())
-        }.map { CoinMapper().map(it) }
+        }.map {
+            CoinMapper().map(it)
+        }
     }
 }

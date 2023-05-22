@@ -12,6 +12,7 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.ClickableText
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.Button
+import androidx.compose.material.MaterialTheme
 import androidx.compose.material.OutlinedTextField
 import androidx.compose.material.Surface
 import androidx.compose.material.Text
@@ -31,7 +32,6 @@ import androidx.navigation.NavGraphBuilder
 import androidx.navigation.compose.composable
 import androidx.navigation.navigation
 import com.karan.coingecko.demo.navigation.CoinGeckoGraphs
-import com.karan.coingecko.demo.ui.theme.Purple700
 
 fun NavGraphBuilder.authScreenGraph(
     navigateToSignUp: () -> Unit,
@@ -48,7 +48,7 @@ fun NavGraphBuilder.authScreenGraph(
             Signup()
         }
         composable(AuthRoutes.ForgotPassword.route) {
-            ForgotPassword()
+            ForgotPasswordScreen()
         }
     }
 }
@@ -69,7 +69,7 @@ fun LoginScreen(
             style = TextStyle(
                 fontSize = 14.sp,
                 textDecoration = TextDecoration.Underline,
-                color = Purple700
+                color = MaterialTheme.colors.primary
             )
         )
     }

@@ -6,8 +6,7 @@ import androidx.navigation.navigation
 import com.karan.coingecko.demo.navigation.CoinGeckoGraphs
 import com.karan.coingecko.demo.navigation.CoinGeckoNavigationActions
 
-
-object Settings : TopLevelRoutes("settings")
+object Settings : Routes("settings")
 
 fun NavGraphBuilder.settingsGraph(
     navigationAction: CoinGeckoNavigationActions,

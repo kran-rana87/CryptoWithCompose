@@ -6,7 +6,7 @@ import androidx.navigation.navigation
 import com.karan.coingecko.demo.navigation.CoinGeckoGraphs
 import com.karan.coingecko.demo.navigation.CoinGeckoNavigationActions
 
-object Favourites : TopLevelRoutes("favourites")
+object Favourites : Routes("favourites")
 
 fun NavGraphBuilder.favouritesGraph(
     navigationAction: CoinGeckoNavigationActions,

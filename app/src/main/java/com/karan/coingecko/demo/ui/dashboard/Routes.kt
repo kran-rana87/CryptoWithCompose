@@ -1,4 +1,4 @@
 package com.karan.coingecko.demo.ui.dashboard
 
-sealed class TopLevelRoutes(val route: String) {
+sealed class Routes(val route: String) {
 }

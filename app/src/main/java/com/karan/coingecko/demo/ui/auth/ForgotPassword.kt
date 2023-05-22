@@ -19,7 +19,7 @@ import androidx.compose.ui.unit.dp
 
 
 @Composable
-fun ForgotPassword() {
+fun ForgotPasswordScreen() {
     Column(
         modifier = Modifier
             .padding(20.dp)

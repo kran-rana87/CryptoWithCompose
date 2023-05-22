@@ -2,7 +2,6 @@ package com.karan.coingecko.demo.navigation
 
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.BottomNavigation
 import androidx.compose.material.BottomNavigationItem
 import androidx.compose.material.Icon
@@ -13,14 +12,22 @@ import androidx.compose.material.Text
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.FavoriteBorder
 import androidx.compose.material.icons.filled.Home
+import androidx.compose.material.icons.filled.MailOutline
 import androidx.compose.material.icons.filled.Settings
+import androidx.compose.material.icons.outlined.AccountCircle
+import androidx.compose.material.icons.outlined.Home
+import androidx.compose.material.icons.outlined.Info
+import androidx.compose.material.icons.outlined.Menu
+import androidx.compose.material.icons.outlined.MoreVert
+import androidx.compose.material.icons.outlined.Star
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.State
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavGraph.Companion.findStartDestination
@@ -73,9 +80,11 @@ fun MainNavHost(
     navigationAction: CoinGeckoNavigationActions,
     initialRoute: String
 ) {
-    Scaffold(bottomBar = {
-        if (loginState.value == LoginState.LoggedIn) CoinGeckoAppBar(navController)
-    }) { padding ->
+    Scaffold(
+        backgroundColor = MaterialTheme.colors.background,
+        bottomBar = {
+            if (loginState.value == LoginState.LoggedIn) CoinGeckoBottomBar(navController)
+        }) { padding ->
         Surface(
             Modifier
                 .fillMaxSize()
@@ -100,25 +109,24 @@ fun MainNavHost(
 }
 
 @Composable
-fun CoinGeckoAppBar(navController: NavHostController) {
+fun CoinGeckoBottomBar(navController: NavHostController) {
     val navBackStackEntry by navController.currentBackStackEntryAsState()
     val currentRoute = navBackStackEntry?.destination?.route
 
     val topLevelDestinations = listOf(
-        NavItem(TopCoins.route, Icons.Default.Home, "Home"),
-        NavItem(Favourites.route, Icons.Default.FavoriteBorder, "Favourites"),
-        NavItem(Settings.route, Icons.Default.Settings, "Settings")
+        NavItem(TopCoins.route, Icons.Outlined.Home, "Explore"),
+        NavItem(Favourites.route, Icons.Outlined.Star, "Favourites"),
+        NavItem(Settings.route, Icons.Outlined.Menu, "More")
     )
 
     BottomNavigation(
-        modifier = Modifier.clip(RoundedCornerShape(20.dp)).padding(5.dp),
         elevation = 10.dp,
-        backgroundColor = MaterialTheme.colors.onBackground
     ) {
         topLevelDestinations.forEach { navItem ->
+            val selected = currentRoute == navItem.route
             BottomNavigationItem(
                 alwaysShowLabel = false,
-                selected = currentRoute == navItem.route,
+                selected = selected,
                 onClick = {
                     navController.navigate(navItem.route) {
                         popUpTo(navController.graph.findStartDestination().id) {
@@ -132,10 +140,20 @@ fun CoinGeckoAppBar(navController: NavHostController) {
                     }
                 },
                 icon = {
-                    Icon(navItem.icon, contentDescription = navItem.title)
+                    Icon(
+                        navItem.icon,
+                        contentDescription = navItem.title,
+                        tint = if (selected) MaterialTheme.colors.secondaryVariant else Color.Gray
+                    )
                 },
                 label = {
-                    Text(navItem.title)
+                    Text(
+                        navItem.title,
+                        style = TextStyle(
+                            color =
+                            if (selected) MaterialTheme.colors.secondaryVariant else Color.Gray
+                        )
+                    )
                 }
             )
         }

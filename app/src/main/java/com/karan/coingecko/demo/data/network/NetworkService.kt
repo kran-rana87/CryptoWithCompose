@@ -5,7 +5,7 @@ import retrofit2.http.GET
 
 interface NetworkService {
 
-    @GET("/data/top/totalvolfull?limit=10&tsym=AUD")
+    @GET("/data/top/mktcapfull?limit=30&tsym=AUD")
     suspend fun getDashboardData(): CoinListResponse
 }
 

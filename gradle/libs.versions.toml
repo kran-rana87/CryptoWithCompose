@@ -4,7 +4,7 @@ androidLibraryPlugin = "7.4.1"
 kotlinAndroidPlugin = "1.8.10"
 hilt = "2.44.2"
 hiltExt = "1.0.0"
-hiltCompiler ="2.44"
+hiltCompiler = "2.44"
 retrofit = "2.9.0"
 androidxCoreKtx = "1.9.0"
 androidxAppCompat = "1.6.1"
@@ -25,8 +25,10 @@ junitExt = "1.1.5"
 espressoCore = "3.5.1"
 kotlinxSerializationJson = "1.5.0"
 kotlin = "1.8.10"
-kotlinxSerializationConv ="1.0.0"
-dataStore ="1.0.0"
+kotlinxSerializationConv = "1.0.0"
+dataStore = "1.0.0"
+coroutines = "1.6.1"
+coil = "2.4.0"
 
 [libraries]
 hilt-android-compiler = { group = "com.google.dagger", name = "hilt-android-compiler", version.ref = "hilt" }
@@ -66,6 +68,9 @@ junit-ext = { group = "androidx.test.ext", name = "junit", version.ref = "junitE
 kotlinx-serialization-json = { group = "org.jetbrains.kotlinx", name = "kotlinx-serialization-json", version.ref = "kotlinxSerializationJson" }
 kotlinx-serialization-converter = { group = "com.jakewharton.retrofit", name = "retrofit2-kotlinx-serialization-converter", version.ref = "kotlinxSerializationConv" }
 data-store = { group = "androidx.datastore", name = "datastore-preferences", version.ref = "dataStore" }
+coroutines-core = { group = "org.jetbrains.kotlinx", name = "kotlinx-coroutines-core", version.ref = "coroutines" }
+coil-compose = { group = "io.coil-kt", name = "coil-compose", version.ref = "coil" }
+
 
 
 [plugins]

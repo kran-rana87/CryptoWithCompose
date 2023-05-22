@@ -8,7 +8,7 @@ import com.karan.coingecko.demo.navigation.CoinGeckoNavigationActions
 
 
 
-object TopCoins : TopLevelRoutes("topCoins")
+object TopCoins : Routes("topCoins")
 
 fun NavGraphBuilder.topCoinGraph(
     navigationAction: CoinGeckoNavigationActions
