@@ -4,16 +4,21 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.ClickableText
 import androidx.compose.foundation.text.KeyboardOptions
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.Button
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.OutlinedTextField
+import androidx.compose.material.Scaffold
 import androidx.compose.material.Surface
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
@@ -32,92 +37,89 @@ import androidx.navigation.NavGraphBuilder
 import androidx.navigation.compose.composable
 import androidx.navigation.navigation
 import com.karan.coingecko.demo.navigation.CoinGeckoGraphs
+import com.karan.coingecko.demo.ui.MultiPreview
+import com.karan.coingecko.demo.ui.dashboard.FavouritesScreen
 
-fun NavGraphBuilder.authScreenGraph(
+
+@Composable
+fun LoginRoutes(
     navigateToSignUp: () -> Unit,
     navigateToForgotPassword: () -> Unit,
+    loginViewModel: LoginViewModel = hiltViewModel()
 ) {
-    navigation(
-        startDestination = AuthRoutes.SignIn.route,
-        route = CoinGeckoGraphs.AUTH_ROUTE_GRAPH,
-    ) {
-        composable(AuthRoutes.SignIn.route) {
-            LoginScreen(navigateToSignUp, navigateToForgotPassword)
-        }
-        composable(AuthRoutes.SignUp.route) {
-            Signup()
-        }
-        composable(AuthRoutes.ForgotPassword.route) {
-            ForgotPasswordScreen()
-        }
-    }
+    LoginScreen(navigateToSignUp, navigateToForgotPassword, loginViewModel::login)
 }
 
 @Composable
 fun LoginScreen(
     navigateToSignUp: () -> Unit,
     navigateToForgotPassword: () -> Unit,
-    loginViewModel: LoginViewModel = hiltViewModel()
+    onLoginClick: () -> Unit
 ) {
-    Box(modifier = Modifier.fillMaxSize()) {
-        ClickableText(
-            text = AnnotatedString("Sign up here"),
+    Scaffold(modifier = Modifier.fillMaxHeight()) { padding ->
+        Column(
             modifier = Modifier
-                .align(Alignment.BottomCenter)
-                .padding(20.dp),
-            onClick = { navigateToSignUp() },
-            style = TextStyle(
-                fontSize = 14.sp,
-                textDecoration = TextDecoration.Underline,
-                color = MaterialTheme.colors.primary
-            )
-        )
-    }
-    Column(
-        modifier = Modifier
-            .padding(20.dp)
-            .fillMaxSize(),
-        verticalArrangement = Arrangement.Center,
-        horizontalAlignment = Alignment.CenterHorizontally
-    ) {
+                .padding(20.dp)
+                .verticalScroll(rememberScrollState())
+                .fillMaxHeight(),
+            horizontalAlignment = Alignment.CenterHorizontally
+        ) {
 
-        Text(text = "Login", style = TextStyle(fontSize = 40.sp, fontFamily = FontFamily.Serif))
+            Text(text = "Login", style = TextStyle(fontSize = 40.sp, fontFamily = FontFamily.Serif))
 
-        Spacer(modifier = Modifier.height(20.dp))
-        OutlinedTextField(
-            label = { Text(text = "Username") },
-            value = "",
-            onValueChange = { })
+            Spacer(modifier = Modifier.height(20.dp))
+            OutlinedTextField(
+                label = { Text(text = "Username") },
+                value = "",
+                onValueChange = { })
 
-        Spacer(modifier = Modifier.height(20.dp))
-        OutlinedTextField(
-            label = { Text(text = "Password") },
-            value = "",
-            visualTransformation = PasswordVisualTransformation(),
-            keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Password),
-            onValueChange = { })
+            Spacer(modifier = Modifier.height(20.dp))
+            OutlinedTextField(
+                label = { Text(text = "Password") },
+                value = "",
+                visualTransformation = PasswordVisualTransformation(),
+                keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Password),
+                onValueChange = { })
 
-        Spacer(modifier = Modifier.height(20.dp))
-        Surface(modifier = Modifier.padding(40.dp, 0.dp, 40.dp, 0.dp)) {
+            Spacer(modifier = Modifier.height(20.dp))
             Button(
-                onClick = { loginViewModel.login() },
+                onClick = { onLoginClick() },
                 shape = RoundedCornerShape(50.dp),
                 modifier = Modifier
-                    .fillMaxWidth()
                     .height(50.dp)
+                    .width(200.dp)
             ) {
                 Text(text = "Login")
             }
-        }
 
-        Spacer(modifier = Modifier.height(20.dp))
-        ClickableText(
-            text = AnnotatedString("Forgot password?"),
-            onClick = { navigateToForgotPassword() },
-            style = TextStyle(
-                fontSize = 14.sp,
-                fontFamily = FontFamily.Default
+            Spacer(modifier = Modifier.height(20.dp))
+            ClickableText(
+                text = AnnotatedString("Forgot password?"),
+                onClick = { navigateToForgotPassword() },
+                style = TextStyle(
+                    fontSize = 14.sp,
+                    fontFamily = FontFamily.Default
+                )
             )
-        )
+            Box(modifier = Modifier.fillMaxSize()) {
+                ClickableText(
+                    text = AnnotatedString("Sign up here"),
+                    modifier = Modifier
+                        .align(Alignment.BottomCenter)
+                        .padding(20.dp),
+                    onClick = { navigateToSignUp() },
+                    style = TextStyle(
+                        fontSize = 14.sp,
+                        textDecoration = TextDecoration.Underline,
+                    )
+                )
+            }
+        }
     }
+}
+
+@MultiPreview
+@Composable
+fun LoginScreenPreview() {
+    LoginScreen(navigateToSignUp = { }, navigateToForgotPassword = { }, onLoginClick = {})
 }

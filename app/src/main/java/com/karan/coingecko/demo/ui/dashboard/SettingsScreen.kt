@@ -19,11 +19,10 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.res.colorResource
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.karan.coingecko.demo.ui.CoinGeckoAppBar
+import com.karan.coingecko.demo.ui.MultiPreview
 
 
 @Composable
@@ -40,15 +39,18 @@ fun SettingsScreen(onLogoutClick: () -> Unit) {
     }) { padding ->
         Box(modifier = Modifier.padding(padding)) {
             Column {
-                Card(modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(10.dp)
-                    .clickable { onLogoutClick() }) {
+                Card(elevation = 5.dp,
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(10.dp)
+                        .clickable { onLogoutClick() })
+                {
                     Row(modifier = Modifier.padding(20.dp)) {
                         Text(text = "Logout")
                     }
                 }
                 Card(
+                    elevation = 5.dp,
                     modifier = Modifier
                         .fillMaxWidth()
                         .padding(10.dp)
@@ -86,7 +88,7 @@ fun SettingsScreen(onLogoutClick: () -> Unit) {
 }
 
 @Composable
-@Preview
+@MultiPreview
 fun SettingsScreenPreview() {
     SettingsScreen { }
 }

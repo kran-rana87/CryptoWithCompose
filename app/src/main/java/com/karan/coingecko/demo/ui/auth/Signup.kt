@@ -22,10 +22,15 @@ import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-
+import com.karan.coingecko.demo.ui.MultiPreview
 
 @Composable
-fun Signup() {
+fun SignupRoute() {
+    Signup()
+}
+
+@Composable
+private fun Signup() {
     Column(
         modifier = Modifier.padding(20.dp).fillMaxSize(),
         verticalArrangement = Arrangement.Center,
@@ -61,4 +66,11 @@ fun Signup() {
             }
         }
     }
+}
+
+
+@Composable
+@MultiPreview
+fun SignupScreenPreview() {
+    Signup()
 }

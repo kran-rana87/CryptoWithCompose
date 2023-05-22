@@ -12,15 +12,15 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.shape.CircleShape
-import androidx.compose.material.Card
+import androidx.compose.foundation.text.ClickableText
 import androidx.compose.material.CircularProgressIndicator
 import androidx.compose.material.Icon
+import androidx.compose.material.LocalTextStyle
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Scaffold
 import androidx.compose.material.Text
@@ -37,7 +37,9 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalInspectionMode
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
@@ -46,19 +48,20 @@ import coil.compose.AsyncImage
 import com.karan.coingecko.demo.domain.models.Coin
 import com.karan.coingecko.demo.domain.models.TopCoinsUIData
 import com.karan.coingecko.demo.ui.CoinGeckoAppBar
-import com.karan.coingecko.demo.ui.Multipreview
+import com.karan.coingecko.demo.ui.MultiPreview
 import com.karan.flow.demo.R
 
 @Composable
 fun TopCoinsRoute(topCoinsViewModel: TopCoinsViewModel = hiltViewModel()) {
     val coinData by topCoinsViewModel.coinData.collectAsStateWithLifecycle()
-    TopCoinsScreen(state = coinData)
+    TopCoinsScreen(state = coinData, topCoinsViewModel::sortByName)
 }
 
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun TopCoinsScreen(
     state: TopCoinsUiState,
+    sortByName: () -> Unit = {}
 ) {
     Scaffold(topBar = {
         CoinGeckoAppBar()
@@ -70,7 +73,7 @@ fun TopCoinsScreen(
 
                     LazyColumn(state = listState) {
                         stickyHeader {
-                            ListHeader()
+                            ListHeader(sortByName = sortByName)
                         }
                         items(state.feed.coinListDashboard, key = { it.id }) {
                             CoinRow(itemScope = it)
@@ -83,7 +86,9 @@ fun TopCoinsScreen(
                         verticalArrangement = Arrangement.Center,
                         horizontalAlignment = Alignment.CenterHorizontally
                     ) {
-                        CircularProgressIndicator()
+                        CircularProgressIndicator(
+                            color = MaterialTheme.colors.secondaryVariant
+                        )
                     }
                 }
                 else -> {
@@ -97,17 +102,49 @@ fun TopCoinsScreen(
 
 @Composable
 fun ListHeader(
+    sortByName: () -> Unit
 ) {
     Row(
         modifier = Modifier
             .fillMaxWidth()
             .background(MaterialTheme.colors.background)
             .padding(10.dp),
-        horizontalArrangement = Arrangement.SpaceBetween,
     ) {
-        Text(text = "Coin")
-        Text(text = "Price(AUD)")
-        Text(text = "Change(24 hr)")
+        StickyHeaderText(
+            title = "Coin",
+            modifier = Modifier
+                .width(120.dp)
+                .padding(start = 10.dp),
+            onClick = sortByName
+        )
+        StickyHeaderText(
+            title = "Price(AUD)",
+            modifier = Modifier.width(100.dp)
+        )
+        StickyHeaderText(
+            title = "Change(24 hr)",
+            modifier = Modifier.fillMaxWidth(),
+            textStyle = TextStyle(textAlign = TextAlign.Right)
+        )
+    }
+}
+
+@Composable
+fun StickyHeaderText(
+    title: String,
+    modifier: Modifier,
+    textStyle: TextStyle = LocalTextStyle.current,
+    onClick: () -> Unit = { }
+) {
+    var style =
+        textStyle.copy(MaterialTheme.colors.onBackground)
+    ClickableText(
+        text = AnnotatedString(title),
+        modifier = modifier,
+        style = style,
+    ) {
+        onClick()
+
     }
 }
 
@@ -122,7 +159,6 @@ fun CoinRow(itemScope: Coin) {
         horizontalArrangement = Arrangement.SpaceBetween
     ) {
         Row(
-
             verticalAlignment = Alignment.CenterVertically,
         ) {
             CoinImageResource(headerImageUrl = itemScope.imageURL)
@@ -131,7 +167,13 @@ fun CoinRow(itemScope: Coin) {
                     .padding(10.dp)
                     .width(50.dp)
             )
-            Text(text = itemScope.price, modifier = Modifier.padding(10.dp))
+            Text(
+                text = itemScope.price,
+                style = TextStyle(textAlign = TextAlign.End),
+                modifier = Modifier
+                    .padding(10.dp)
+                    .width(80.dp)
+            )
 
         }
         Row(
@@ -186,17 +228,18 @@ fun CoinImageResource(
 }
 
 @Composable
-@Multipreview
+@MultiPreview
 fun TopCoinsScreenPreview() {
     TopCoinsScreen(
         state = TopCoinsUiState.Success(
             TopCoinsUIData(
                 listOf(
-                    Coin(1, "Bit", "200.00", -12.3, "", 2.3, 2.3, false),
+                    Coin(1, "Bit", "37727.00", -12.3, "", 2.3, 2.3, false),
                     Coin(2, "Bit", "200.00", 2.3, "", 2.3, 2.3, true)
                 )
             )
         )
     )
 }
+
 

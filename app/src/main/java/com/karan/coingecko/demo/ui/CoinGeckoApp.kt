@@ -1,7 +1,10 @@
 package com.karan.coingecko.demo.navigation
 
+import androidx.compose.foundation.background
+import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.BottomNavigation
 import androidx.compose.material.BottomNavigationItem
 import androidx.compose.material.Icon
@@ -20,13 +23,16 @@ import androidx.compose.material.icons.outlined.Info
 import androidx.compose.material.icons.outlined.Menu
 import androidx.compose.material.icons.outlined.MoreVert
 import androidx.compose.material.icons.outlined.Star
+import androidx.compose.material.primarySurface
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.State
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
@@ -42,6 +48,7 @@ import com.karan.coingecko.demo.ui.dashboard.TopCoins
 import com.karan.coingecko.demo.ui.dashboard.favouritesGraph
 import com.karan.coingecko.demo.ui.dashboard.settingsGraph
 import com.karan.coingecko.demo.ui.dashboard.topCoinGraph
+import com.karan.flow.demo.R
 import kotlinx.coroutines.flow.StateFlow
 
 sealed class LoginState {
@@ -120,7 +127,11 @@ fun CoinGeckoBottomBar(navController: NavHostController) {
     )
 
     BottomNavigation(
-        elevation = 10.dp,
+
+        modifier = Modifier
+            .clip(CircleShape)
+            .padding(10.dp),
+        backgroundColor = MaterialTheme.colors.primarySurface
     ) {
         topLevelDestinations.forEach { navItem ->
             val selected = currentRoute == navItem.route

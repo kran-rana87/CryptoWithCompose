@@ -15,4 +15,4 @@ import androidx.compose.ui.tooling.preview.Preview
     name = "tablet",
     device = Devices.TABLET
 )
-annotation class Multipreview
+annotation class MultiPreview

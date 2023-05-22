@@ -16,10 +16,16 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
+import com.karan.coingecko.demo.ui.MultiPreview
 
 
 @Composable
-fun ForgotPasswordScreen() {
+fun ForgotPasswordRoute() {
+    ForgotPasswordScreen()
+}
+
+@Composable
+private fun ForgotPasswordScreen() {
     Column(
         modifier = Modifier
             .padding(20.dp)
@@ -47,4 +53,10 @@ fun ForgotPasswordScreen() {
             }
         }
     }
+}
+
+@Composable
+@MultiPreview
+fun ForgotPasswordScreenPreview() {
+    ForgotPasswordScreen()
 }
