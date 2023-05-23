@@ -7,14 +7,18 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.material.AlertDialog
 import androidx.compose.material.Card
 import androidx.compose.material.Icon
+import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Scaffold
 import androidx.compose.material.Switch
 import androidx.compose.material.Text
+import androidx.compose.material.TextButton
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.KeyboardArrowRight
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
@@ -33,17 +37,27 @@ fun SettingsRoute(settingsViewModel: SettingsViewModel = hiltViewModel()) {
 @Composable
 fun SettingsScreen(onLogoutClick: () -> Unit) {
     val darkModeState = remember { mutableStateOf(true) }
+    val logoutConfirmation = remember { mutableStateOf(false) }
 
     Scaffold(topBar = {
         CoinGeckoAppBar()
     }) { padding ->
+        if (logoutConfirmation.value) {
+            alertDialog(
+                title = "Are you sure you want to Logout?",
+                onLogoutClick,
+                logoutConfirmation
+            )
+        }
         Box(modifier = Modifier.padding(padding)) {
             Column {
                 Card(elevation = 5.dp,
                     modifier = Modifier
                         .fillMaxWidth()
                         .padding(10.dp)
-                        .clickable { onLogoutClick() })
+                        .clickable {
+                            logoutConfirmation.value = true
+                        })
                 {
                     Row(modifier = Modifier.padding(20.dp)) {
                         Text(text = "Logout")
@@ -85,6 +99,26 @@ fun SettingsScreen(onLogoutClick: () -> Unit) {
             }
         }
     }
+}
+
+@Composable
+fun alertDialog(
+    title: String,
+    onLogoutClick: () -> Unit,
+    logoutConfirmation: MutableState<Boolean>
+) {
+    AlertDialog(
+        backgroundColor = MaterialTheme.colors.surface,
+        onDismissRequest = { logoutConfirmation.value = false },
+        title = { Text(text = title) },
+        confirmButton = {
+            TextButton(onClick = {
+                logoutConfirmation.value = false
+                onLogoutClick()
+            })
+            { Text(text = "OK") }
+        },
+    )
 }
 
 @Composable

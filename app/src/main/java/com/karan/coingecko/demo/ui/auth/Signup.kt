@@ -14,6 +14,8 @@ import androidx.compose.material.OutlinedTextField
 import androidx.compose.material.Surface
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.TextStyle
@@ -31,8 +33,13 @@ fun SignupRoute() {
 
 @Composable
 private fun Signup() {
+    val userNameInput = remember { mutableStateOf("Dummy Username") }
+    val passwordInput = remember { mutableStateOf("Password") }
+
     Column(
-        modifier = Modifier.padding(20.dp).fillMaxSize(),
+        modifier = Modifier
+            .padding(20.dp)
+            .fillMaxSize(),
         verticalArrangement = Arrangement.Center,
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
@@ -42,16 +49,16 @@ private fun Signup() {
         Spacer(modifier = Modifier.height(20.dp))
         OutlinedTextField(
             label = { Text(text = "Username") },
-            value = "",
-            onValueChange = { })
+            value = userNameInput.value,
+            onValueChange = { userNameInput.value = it })
 
         Spacer(modifier = Modifier.height(20.dp))
         OutlinedTextField(
             label = { Text(text = "Password") },
-            value = "",
+            value = passwordInput.value,
             visualTransformation = PasswordVisualTransformation(),
             keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Password),
-            onValueChange = { })
+            onValueChange = { passwordInput.value = it })
 
         Spacer(modifier = Modifier.height(20.dp))
         Surface(modifier = Modifier.padding(40.dp, 0.dp, 40.dp, 0.dp)) {

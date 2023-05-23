@@ -13,6 +13,8 @@ import androidx.compose.material.OutlinedTextField
 import androidx.compose.material.Surface
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
@@ -26,6 +28,7 @@ fun ForgotPasswordRoute() {
 
 @Composable
 private fun ForgotPasswordScreen() {
+    val userNameInput = remember { mutableStateOf("Dummy Email") }
     Column(
         modifier = Modifier
             .padding(20.dp)
@@ -37,8 +40,8 @@ private fun ForgotPasswordScreen() {
 
         OutlinedTextField(
             label = { Text(text = "Email") },
-            value = "",
-            onValueChange = { })
+            value = userNameInput.value,
+            onValueChange = { userNameInput.value = it})
 
         Spacer(modifier = Modifier.height(20.dp))
         Surface(modifier = Modifier.padding(40.dp, 0.dp, 40.dp, 0.dp)) {

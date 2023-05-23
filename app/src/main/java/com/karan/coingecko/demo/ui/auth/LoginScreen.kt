@@ -14,10 +14,13 @@ import androidx.compose.foundation.text.ClickableText
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.Button
+import androidx.compose.material.MaterialTheme
 import androidx.compose.material.OutlinedTextField
 import androidx.compose.material.Scaffold
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.AnnotatedString
@@ -47,10 +50,13 @@ fun LoginScreen(
     navigateToForgotPassword: () -> Unit,
     onLoginClick: () -> Unit
 ) {
+    val userNameInput = remember { mutableStateOf("Dummy Username") }
+    val passwordInput = remember { mutableStateOf("Password") }
+
     Scaffold(modifier = Modifier.fillMaxHeight()) { padding ->
         Column(
             modifier = Modifier
-                .padding(20.dp)
+                .padding(top = 100.dp)
                 .verticalScroll(rememberScrollState())
                 .fillMaxHeight(),
             horizontalAlignment = Alignment.CenterHorizontally
@@ -61,16 +67,16 @@ fun LoginScreen(
             Spacer(modifier = Modifier.height(20.dp))
             OutlinedTextField(
                 label = { Text(text = "Username") },
-                value = "",
-                onValueChange = { })
+                value = userNameInput.value,
+                onValueChange = { userNameInput.value = it })
 
             Spacer(modifier = Modifier.height(20.dp))
             OutlinedTextField(
                 label = { Text(text = "Password") },
-                value = "",
+                value = passwordInput.value,
                 visualTransformation = PasswordVisualTransformation(),
                 keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Password),
-                onValueChange = { })
+                onValueChange = { passwordInput.value = it })
 
             Spacer(modifier = Modifier.height(20.dp))
             Button(
@@ -89,7 +95,8 @@ fun LoginScreen(
                 onClick = { navigateToForgotPassword() },
                 style = TextStyle(
                     fontSize = 14.sp,
-                    fontFamily = FontFamily.Default
+                    fontFamily = FontFamily.Default,
+                    color = MaterialTheme.colors.onBackground
                 )
             )
             Box(modifier = Modifier.fillMaxSize()) {
@@ -102,6 +109,7 @@ fun LoginScreen(
                     style = TextStyle(
                         fontSize = 14.sp,
                         textDecoration = TextDecoration.Underline,
+                        color = MaterialTheme.colors.onBackground
                     )
                 )
             }
