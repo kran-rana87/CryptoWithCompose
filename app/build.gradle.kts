@@ -58,6 +58,7 @@ dependencies {
 
     implementation(project(":data-local"))
     implementation(project(":domain"))
+    implementation(project(":data-network"))
 
     implementation(libs.androidx.appcompat)
     implementation(libs.androidx.core)

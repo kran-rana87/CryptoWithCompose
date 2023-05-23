@@ -6,16 +6,16 @@ import androidx.navigation.navigation
 import com.karan.coingecko.demo.navigation.CoinGeckoGraphs
 import com.karan.coingecko.demo.navigation.CoinGeckoNavigationActions
 
-object Settings : Routes("settings")
+const val settings = "settings"
 
 fun NavGraphBuilder.settingsGraph(
     navigationAction: CoinGeckoNavigationActions,
 ) {
     navigation(
-        startDestination = Settings.route,
+        startDestination = settings,
         route = CoinGeckoGraphs.SETTINGS_GRAPH,
     ) {
-        composable(Settings.route) {
+        composable(settings) {
             SettingsRoute()
         }
     }

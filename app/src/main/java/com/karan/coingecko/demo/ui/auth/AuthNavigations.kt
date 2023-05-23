@@ -6,22 +6,26 @@ import androidx.navigation.navigation
 import com.karan.coingecko.demo.navigation.CoinGeckoGraphs
 
 
+const val signIn = "signIn"
+const val signUp = "signUp"
+const val forgotPassword = "forgotPassword"
+
 
 fun NavGraphBuilder.authScreenGraph(
     navigateToSignUp: () -> Unit,
     navigateToForgotPassword: () -> Unit,
 ) {
     navigation(
-        startDestination = AuthRoutes.SignIn.route,
+        startDestination = signIn,
         route = CoinGeckoGraphs.AUTH_ROUTE_GRAPH,
     ) {
-        composable(AuthRoutes.SignIn.route) {
+        composable(signIn) {
             LoginRoutes(navigateToSignUp, navigateToForgotPassword)
         }
-        composable(AuthRoutes.SignUp.route) {
+        composable(signUp) {
             SignupRoute()
         }
-        composable(AuthRoutes.ForgotPassword.route) {
+        composable(forgotPassword) {
             ForgotPasswordRoute()
         }
     }

@@ -4,7 +4,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.karan.coingecko.demo.domain.models.Coin
 import com.karan.coingecko.demo.domain.models.TopCoinsUIData
-import com.karan.coingecko.demo.domain.repository.TopCoinsRepository
+import com.karan.coingecko.demo.network.repository.TopCoinsRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow

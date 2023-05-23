@@ -6,16 +6,16 @@ import androidx.navigation.navigation
 import com.karan.coingecko.demo.navigation.CoinGeckoGraphs
 import com.karan.coingecko.demo.navigation.CoinGeckoNavigationActions
 
-object Favourites : Routes("favourites")
+const val favourites = "favourites"
 
 fun NavGraphBuilder.favouritesGraph(
     navigationAction: CoinGeckoNavigationActions,
 ) {
     navigation(
-        startDestination = Favourites.route,
+        startDestination = favourites,
         route = CoinGeckoGraphs.FAVOURITES_GRAPH,
     ) {
-        composable(Favourites.route) {
+        composable(favourites) {
             FavouritesRoute()
         }
     }

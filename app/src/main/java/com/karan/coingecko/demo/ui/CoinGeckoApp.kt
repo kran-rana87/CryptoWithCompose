@@ -1,7 +1,5 @@
 package com.karan.coingecko.demo.navigation
 
-import androidx.compose.foundation.background
-import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.CircleShape
@@ -13,15 +11,9 @@ import androidx.compose.material.Scaffold
 import androidx.compose.material.Surface
 import androidx.compose.material.Text
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.FavoriteBorder
-import androidx.compose.material.icons.filled.Home
-import androidx.compose.material.icons.filled.MailOutline
 import androidx.compose.material.icons.filled.Settings
-import androidx.compose.material.icons.outlined.AccountCircle
 import androidx.compose.material.icons.outlined.Home
-import androidx.compose.material.icons.outlined.Info
 import androidx.compose.material.icons.outlined.Menu
-import androidx.compose.material.icons.outlined.MoreVert
 import androidx.compose.material.icons.outlined.Star
 import androidx.compose.material.primarySurface
 import androidx.compose.runtime.Composable
@@ -32,7 +24,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
-import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
@@ -42,13 +33,12 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import com.karan.coingecko.demo.ui.auth.authScreenGraph
-import com.karan.coingecko.demo.ui.dashboard.Favourites
-import com.karan.coingecko.demo.ui.dashboard.Settings
-import com.karan.coingecko.demo.ui.dashboard.TopCoins
+import com.karan.coingecko.demo.ui.dashboard.favourites
 import com.karan.coingecko.demo.ui.dashboard.favouritesGraph
+import com.karan.coingecko.demo.ui.dashboard.settings
 import com.karan.coingecko.demo.ui.dashboard.settingsGraph
 import com.karan.coingecko.demo.ui.dashboard.topCoinGraph
-import com.karan.flow.demo.R
+import com.karan.coingecko.demo.ui.dashboard.topCoins
 import kotlinx.coroutines.flow.StateFlow
 
 sealed class LoginState {
@@ -121,9 +111,9 @@ fun CoinGeckoBottomBar(navController: NavHostController) {
     val currentRoute = navBackStackEntry?.destination?.route
 
     val topLevelDestinations = listOf(
-        NavItem(TopCoins.route, Icons.Outlined.Home, "Explore"),
-        NavItem(Favourites.route, Icons.Outlined.Star, "Favourites"),
-        NavItem(Settings.route, Icons.Outlined.Menu, "More")
+        NavItem(topCoins, Icons.Outlined.Home, "Explore"),
+        NavItem(favourites, Icons.Outlined.Star, "Favourites"),
+        NavItem(settings, Icons.Outlined.Menu, "More")
     )
 
     BottomNavigation(

@@ -7,17 +7,16 @@ import com.karan.coingecko.demo.navigation.CoinGeckoGraphs
 import com.karan.coingecko.demo.navigation.CoinGeckoNavigationActions
 
 
-
-object TopCoins : Routes("topCoins")
+const val topCoins = "topCoins"
 
 fun NavGraphBuilder.topCoinGraph(
     navigationAction: CoinGeckoNavigationActions
 ) {
     navigation(
-        startDestination = TopCoins.route,
+        startDestination = topCoins,
         route = CoinGeckoGraphs.TOP_COINS_GRAPH,
     ) {
-        composable(TopCoins.route) {
+        composable(topCoins) {
             TopCoinsRoute()
         }
     }
