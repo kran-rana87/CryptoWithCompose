@@ -1,10 +1,10 @@
-package com.karan.coingecko.demo.network.repository
+package com.karan.coingecko.demo.network.impl
 
-import com.karan.coingecko.demo.data.local.StorageRepository
+import com.karan.coingecko.demo.data.local.StorageRepositoryImpl
 import com.karan.coingecko.demo.network.repository.AuthRepository
 import javax.inject.Inject
 
-class AuthRepositoryImpl @Inject constructor(val storageRepo: StorageRepository) :
+class AuthRepositoryImpl @Inject constructor(private val storageRepo: StorageRepositoryImpl) :
     AuthRepository {
 
 

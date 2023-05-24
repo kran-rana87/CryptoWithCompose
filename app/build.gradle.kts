@@ -107,4 +107,10 @@ dependencies {
     androidTestImplementation(libs.junit.ext)
     androidTestImplementation(libs.compose.uitestmanifest)
     debugImplementation(libs.compose.tooling)
+
+    testImplementation(libs.mockito.core)
+    testImplementation(libs.mockk.io)
+    testImplementation(libs.mockito.kotlin)
+    testImplementation("app.cash.turbine:turbine:0.8.0")
+
 }

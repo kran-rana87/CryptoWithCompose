@@ -4,13 +4,12 @@ import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
 @Serializable
-data class CoinListResponse(@SerialName("Data") val coinList: List<CoinResponse>)
+data class CoinListNetworkResponse(@SerialName("Data") val coinList: List<CoinResponse> = emptyList())
 
 @Serializable
 data class CoinResponse(
     @SerialName("CoinInfo") val coinInfoResponse: CoinInfoResponse,
-    @SerialName("RAW") val data: PriceData
-
+    @SerialName("RAW") val data: PriceData? = null
 )
 
 @Serializable

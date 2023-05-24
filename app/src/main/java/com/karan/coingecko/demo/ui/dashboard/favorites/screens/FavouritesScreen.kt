@@ -19,7 +19,7 @@ import com.karan.coingecko.demo.ui.MultiPreview
 
 
 @Composable
-fun FavouritesRoute() {
+internal fun FavouritesRoute() {
     FavouritesScreen()
 }
 

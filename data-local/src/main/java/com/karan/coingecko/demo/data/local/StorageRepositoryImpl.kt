@@ -12,13 +12,14 @@ import javax.inject.Inject
 
 private val Context.dataStore by preferencesDataStore("settings")
 
-class StorageRepository @Inject constructor(@ApplicationContext val appContext: Context) {
+class StorageRepositoryImpl @Inject constructor(@ApplicationContext val appContext: Context) :
+    StorageRepostory {
 
     private object PreferencesKeys {
         val IS_LOGGED_IN = androidx.datastore.preferences.core.booleanPreferencesKey("is_logged_in")
     }
 
-    private val isUserLoggedInFlow: Flow<Boolean> = appContext.dataStore.data
+    val isUserLoggedInFlow: Flow<Boolean> = appContext.dataStore.data
         .catch { exception ->
             // dataStore.data throws an IOException when an error is encountered when reading data
             if (exception is IOException) {
@@ -31,13 +32,13 @@ class StorageRepository @Inject constructor(@ApplicationContext val appContext: 
         }
 
 
-    suspend fun updateLoginState(isLoggedIn: Boolean) {
+    override suspend fun updateLoginState(isLoggedIn: Boolean) {
         appContext.dataStore.edit { preferences ->
             preferences[PreferencesKeys.IS_LOGGED_IN] = isLoggedIn
         }
     }
 
-    fun fetchUserLoginState() =
+    override fun fetchUserLoginState() =
         isUserLoggedInFlow
 
     private fun mapUserPreferences(preferences: androidx.datastore.preferences.core.Preferences): Boolean {

@@ -1,12 +1,12 @@
-package com.karan.coingecko.demo.ui.dashboard
+package com.karan.coingecko.demo.ui.dashboard.topcoins.screens
 
-import com.karan.coingecko.demo.domain.models.TopCoinsUIData
+import com.karan.coingecko.demo.domain.models.TopCoinsData
 
 sealed interface TopCoinsUiState {
     object Loading : TopCoinsUiState
 
     data class Success(
-        val feed: TopCoinsUIData,
+        val feed: TopCoinsData,
     ) : TopCoinsUiState
 
     object Failure : TopCoinsUiState

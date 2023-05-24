@@ -1,8 +1,8 @@
 package com.karan.coingecko.demo.navigation
 
 import androidx.navigation.NavHostController
-import com.karan.coingecko.demo.ui.auth.forgotPassword
-import com.karan.coingecko.demo.ui.auth.signUp
+import com.karan.coingecko.demo.ui.auth.navigation.forgotPassword
+import com.karan.coingecko.demo.ui.auth.navigation.signUp
 
 object CoinGeckoGraphs {
     const val AUTH_ROUTE_GRAPH = "login_graph"

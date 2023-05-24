@@ -1,9 +1,10 @@
 package com.karan.coingecko.demo.network.repository
 
-import com.karan.coingecko.demo.domain.models.TopCoinsUIData
+import com.karan.coingecko.demo.domain.models.TopCoinsData
 import kotlinx.coroutines.flow.Flow
 
 interface TopCoinsRepository {
-    fun fetchTopCoins(): Flow<TopCoinsUIData>
+
+    fun fetchTopCoins(): Flow<TopCoinsData>
 
 }

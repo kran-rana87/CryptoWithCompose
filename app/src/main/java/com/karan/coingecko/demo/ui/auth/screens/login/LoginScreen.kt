@@ -1,4 +1,4 @@
-package com.karan.coingecko.demo.ui.auth
+package com.karan.coingecko.demo.ui.auth.screens.login
 
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column

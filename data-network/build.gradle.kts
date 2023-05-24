@@ -12,6 +12,8 @@ android {
 
     defaultConfig {
         minSdk = 24
+        testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
+
     }
 
     compileOptions {
@@ -25,9 +27,8 @@ android {
 
 dependencies {
     implementation(project(":common"))
-     // TODO Remove 'domain' dependency by using UseCases in the domain Layer
-    implementation(project(":domain"))
     implementation(project(":data-local"))
+    implementation(project(":domain"))
 
     kapt(libs.hilt.ext.compiler)
     implementation(libs.retrofit.client)
@@ -36,4 +37,12 @@ dependencies {
 
     implementation(libs.kotlinx.serialization.json)
     implementation(libs.kotlinx.serialization.converter)
+    implementation(libs.compose.uitestjunit)
+
+    testImplementation(libs.mockito.core)
+    testImplementation(libs.mockk.io)
+    testImplementation(libs.mockito.kotlin)
+    testImplementation("app.cash.turbine:turbine:0.8.0")
+    testImplementation(libs.junit)
+    androidTestImplementation(libs.junit.ext)
 }

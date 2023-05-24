@@ -29,6 +29,9 @@ kotlinxSerializationConv = "1.0.0"
 dataStore = "1.0.0"
 coroutines = "1.6.1"
 coil = "2.4.0"
+mockito="5.3.1"
+mockk="1.12.4"
+mockitokotlin="4.1.0"
 
 [libraries]
 hilt-android-compiler = { group = "com.google.dagger", name = "hilt-android-compiler", version.ref = "hilt" }
@@ -70,7 +73,9 @@ kotlinx-serialization-converter = { group = "com.jakewharton.retrofit", name = "
 data-store = { group = "androidx.datastore", name = "datastore-preferences", version.ref = "dataStore" }
 coroutines-core = { group = "org.jetbrains.kotlinx", name = "kotlinx-coroutines-core", version.ref = "coroutines" }
 coil-compose = { group = "io.coil-kt", name = "coil-compose", version.ref = "coil" }
-
+mockito-core = { group = "org.mockito", name = "mockito-core", version.ref = "mockito" }
+mockk-io = { group = "io.mockk", name = "mockk", version.ref = "mockk" }
+mockito-kotlin = { group = "org.mockito.kotlin", name = "mockito-kotlin", version.ref = "mockitokotlin" }
 
 
 [plugins]

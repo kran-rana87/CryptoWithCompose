@@ -1,4 +1,4 @@
-package com.karan.coingecko.demo.navigation
+package com.karan.coingecko.demo.ui
 
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
@@ -11,7 +11,6 @@ import androidx.compose.material.Scaffold
 import androidx.compose.material.Surface
 import androidx.compose.material.Text
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Settings
 import androidx.compose.material.icons.outlined.Home
 import androidx.compose.material.icons.outlined.Menu
 import androidx.compose.material.icons.outlined.Star
@@ -32,21 +31,18 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
-import com.karan.coingecko.demo.ui.auth.authScreenGraph
+import com.karan.coingecko.demo.navigation.CoinGeckoGraphs
+import com.karan.coingecko.demo.navigation.CoinGeckoNavigationActions
+import com.karan.coingecko.demo.ui.auth.navigation.authScreenGraph
+import com.karan.coingecko.demo.ui.auth.screens.LoginState
 import com.karan.coingecko.demo.ui.dashboard.favourites
 import com.karan.coingecko.demo.ui.dashboard.favouritesGraph
-import com.karan.coingecko.demo.ui.dashboard.settings
-import com.karan.coingecko.demo.ui.dashboard.settingsGraph
-import com.karan.coingecko.demo.ui.dashboard.topCoinGraph
-import com.karan.coingecko.demo.ui.dashboard.topCoins
+import com.karan.coingecko.demo.ui.dashboard.settings.navigation.settings
+import com.karan.coingecko.demo.ui.dashboard.settings.navigation.settingsGraph
+import com.karan.coingecko.demo.ui.dashboard.topcoins.navigation.topCoinGraph
+import com.karan.coingecko.demo.ui.dashboard.topcoins.navigation.topCoins
 import kotlinx.coroutines.flow.StateFlow
 
-sealed class LoginState {
-    object LoggedIn : LoginState() // hasLoggedIn = true
-    object NotLoggedIn : LoginState() // hasLoggedIn = false
-    object Loading : LoginState() // Unknown
-
-}
 
 @Composable
 fun CoinGeckoApp(userState: StateFlow<LoginState>) {
@@ -87,6 +83,7 @@ fun MainNavHost(
                 .fillMaxSize()
                 .padding(padding)
         ) {
+            // Single NavHost for hosting all screens
             NavHost(
                 navController, startDestination = initialRoute
             ) {

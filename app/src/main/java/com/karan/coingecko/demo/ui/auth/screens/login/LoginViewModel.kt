@@ -1,18 +1,19 @@
-package com.karan.coingecko.demo.ui.dashboard
+package com.karan.coingecko.demo.ui.auth.screens.login
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.karan.coingecko.demo.data.local.StorageRepository
+import com.karan.coingecko.demo.network.repository.AuthRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import javax.inject.Inject
+
 @HiltViewModel
-class SettingsViewModel @Inject constructor(val storageRepository: StorageRepository) :
+class LoginViewModel @Inject constructor(private val authRepo: AuthRepository) :
     ViewModel() {
 
-    fun logout() {
+    fun login() {
         viewModelScope.launch {
-            storageRepository.updateLoginState(false)
+            authRepo.login()
         }
     }
 }

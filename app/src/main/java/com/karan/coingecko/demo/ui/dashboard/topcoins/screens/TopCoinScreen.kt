@@ -1,4 +1,4 @@
-package com.karan.coingecko.demo.ui.dashboard
+package com.karan.coingecko.demo.ui.dashboard.topcoins.screens
 
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
@@ -46,20 +46,20 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import coil.compose.AsyncImage
 import com.karan.coingecko.demo.domain.models.Coin
-import com.karan.coingecko.demo.domain.models.TopCoinsUIData
+import com.karan.coingecko.demo.domain.models.TopCoinsData
 import com.karan.coingecko.demo.ui.CoinGeckoAppBar
 import com.karan.coingecko.demo.ui.MultiPreview
 import com.karan.flow.demo.R
 
 @Composable
-fun TopCoinsRoute(topCoinsViewModel: TopCoinsViewModel = hiltViewModel()) {
+internal fun TopCoinsRoute(topCoinsViewModel: TopCoinsViewModel = hiltViewModel()) {
     val coinData by topCoinsViewModel.coinData.collectAsStateWithLifecycle()
     TopCoinsScreen(state = coinData, topCoinsViewModel::sortByName)
 }
 
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
-fun TopCoinsScreen(
+internal fun TopCoinsScreen(
     state: TopCoinsUiState,
     sortByName: () -> Unit = {}
 ) {
@@ -101,7 +101,7 @@ fun TopCoinsScreen(
 
 
 @Composable
-fun ListHeader(
+internal fun ListHeader(
     sortByName: () -> Unit
 ) {
     Row(
@@ -130,7 +130,7 @@ fun ListHeader(
 }
 
 @Composable
-fun StickyHeaderText(
+internal fun StickyHeaderText(
     title: String,
     modifier: Modifier,
     textStyle: TextStyle = LocalTextStyle.current,
@@ -150,7 +150,7 @@ fun StickyHeaderText(
 
 @OptIn(ExperimentalLayoutApi::class)
 @Composable
-fun CoinRow(itemScope: Coin) {
+internal fun CoinRow(itemScope: Coin) {
     FlowRow(
         modifier = Modifier
             .fillMaxWidth()
@@ -209,7 +209,7 @@ fun CoinRow(itemScope: Coin) {
 
 
 @Composable
-fun CoinImageResource(
+internal fun CoinImageResource(
     headerImageUrl: String?,
 ) {
     AsyncImage(
@@ -232,7 +232,7 @@ fun CoinImageResource(
 fun TopCoinsScreenPreview() {
     TopCoinsScreen(
         state = TopCoinsUiState.Success(
-            TopCoinsUIData(
+            TopCoinsData(
                 listOf(
                     Coin(1, "Bit", "37727.00", -12.3, "", 2.3, 2.3, false),
                     Coin(2, "Bit", "200.00", 2.3, "", 2.3, 2.3, true)

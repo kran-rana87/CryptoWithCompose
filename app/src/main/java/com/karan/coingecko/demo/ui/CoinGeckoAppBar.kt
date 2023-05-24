@@ -31,7 +31,7 @@ fun CoinGeckoAppBar() {
                     modifier = Modifier
                         .size(30.dp)
                         .padding(end = 5.dp),
-                    contentDescription = ""
+                    contentDescription = "App Logo"
                 )
                 Text(
                     text = "Coin Gecko",

@@ -1,4 +1,4 @@
-package com.karan.coingecko.demo.ui.dashboard
+package com.karan.coingecko.demo.ui.dashboard.settings.screens
 
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -30,12 +30,12 @@ import com.karan.coingecko.demo.ui.MultiPreview
 
 
 @Composable
-fun SettingsRoute(settingsViewModel: SettingsViewModel = hiltViewModel()) {
+internal fun SettingsRoute(settingsViewModel: SettingsViewModel = hiltViewModel()) {
     SettingsScreen(onLogoutClick = settingsViewModel::logout)
 }
 
 @Composable
-fun SettingsScreen(onLogoutClick: () -> Unit) {
+internal fun SettingsScreen(onLogoutClick: () -> Unit) {
     val darkModeState = remember { mutableStateOf(true) }
     val logoutConfirmation = remember { mutableStateOf(false) }
 
