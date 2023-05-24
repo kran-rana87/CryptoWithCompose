@@ -35,8 +35,8 @@ import com.karan.coingecko.demo.navigation.CoinGeckoGraphs
 import com.karan.coingecko.demo.navigation.CoinGeckoNavigationActions
 import com.karan.coingecko.demo.ui.auth.navigation.authScreenGraph
 import com.karan.coingecko.demo.ui.auth.screens.LoginState
-import com.karan.coingecko.demo.ui.dashboard.favourites
-import com.karan.coingecko.demo.ui.dashboard.favouritesGraph
+import com.karan.coingecko.demo.ui.dashboard.favorites.navigation.favourites
+import com.karan.coingecko.demo.ui.dashboard.favorites.navigation.favouritesGraph
 import com.karan.coingecko.demo.ui.dashboard.settings.navigation.settings
 import com.karan.coingecko.demo.ui.dashboard.settings.navigation.settingsGraph
 import com.karan.coingecko.demo.ui.dashboard.topcoins.navigation.topCoinGraph
@@ -52,44 +52,46 @@ fun CoinGeckoApp(userState: StateFlow<LoginState>) {
         CoinGeckoNavigationActions(navController)
     }
     val loginState =
-        userState.collectAsStateWithLifecycle(initialValue = LoginState.Loading)
+            userState.collectAsStateWithLifecycle(initialValue = LoginState.Loading)
 
     val initialRoute =
-        if (loginState.value == LoginState.NotLoggedIn) CoinGeckoGraphs.AUTH_ROUTE_GRAPH
-        else CoinGeckoGraphs.TOP_COINS_GRAPH
+            if (loginState.value == LoginState.NotLoggedIn)
+                CoinGeckoGraphs.AUTH_ROUTE_GRAPH
+            else CoinGeckoGraphs.TOP_COINS_GRAPH
 
     MainNavHost(
-        navController = navController,
-        loginState = loginState,
-        navigationAction = navigationAction,
-        initialRoute = initialRoute
+            navController = navController,
+            loginState = loginState,
+            navigationAction = navigationAction,
+            initialRoute = initialRoute
     )
 }
 
 @Composable
 fun MainNavHost(
-    navController: NavHostController,
-    loginState: State<LoginState>,
-    navigationAction: CoinGeckoNavigationActions,
-    initialRoute: String
+        navController: NavHostController,
+        loginState: State<LoginState>,
+        navigationAction: CoinGeckoNavigationActions,
+        initialRoute: String
 ) {
     Scaffold(
-        backgroundColor = MaterialTheme.colors.background,
-        bottomBar = {
-            if (loginState.value == LoginState.LoggedIn) CoinGeckoBottomBar(navController)
-        }) { padding ->
+            backgroundColor = MaterialTheme.colors.background,
+            bottomBar = {
+                if (loginState.value == LoginState.LoggedIn)
+                    CoinGeckoBottomBar(navController)
+            }) { padding ->
         Surface(
-            Modifier
-                .fillMaxSize()
-                .padding(padding)
+                Modifier
+                        .fillMaxSize()
+                        .padding(padding)
         ) {
             // Single NavHost for hosting all screens
             NavHost(
-                navController, startDestination = initialRoute
+                    navController, startDestination = initialRoute
             ) {
                 authScreenGraph(
-                    navigationAction.navigateTeSignUp,
-                    navigationAction.navigateTeForgotPassword
+                        navigationAction.navigateTeSignUp,
+                        navigationAction.navigateTeForgotPassword
                 )
 
                 topCoinGraph(navigationAction)
@@ -108,51 +110,54 @@ fun CoinGeckoBottomBar(navController: NavHostController) {
     val currentRoute = navBackStackEntry?.destination?.route
 
     val topLevelDestinations = listOf(
-        NavItem(topCoins, Icons.Outlined.Home, "Explore"),
-        NavItem(favourites, Icons.Outlined.Star, "Favourites"),
-        NavItem(settings, Icons.Outlined.Menu, "More")
+            NavItem(topCoins, Icons.Outlined.Home, "Explore"),
+            NavItem(favourites, Icons.Outlined.Star, "Favourites"),
+            NavItem(settings, Icons.Outlined.Menu, "More")
     )
 
     BottomNavigation(
 
-        modifier = Modifier
-            .clip(CircleShape)
-            .padding(10.dp),
-        backgroundColor = MaterialTheme.colors.primarySurface
+            modifier = Modifier
+                    .clip(CircleShape)
+                    .padding(10.dp),
+            backgroundColor = MaterialTheme.colors.primarySurface
     ) {
         topLevelDestinations.forEach { navItem ->
             val selected = currentRoute == navItem.route
             BottomNavigationItem(
-                alwaysShowLabel = false,
-                selected = selected,
-                onClick = {
-                    navController.navigate(navItem.route) {
-                        popUpTo(navController.graph.findStartDestination().id) {
-                            saveState = true
+                    alwaysShowLabel = false,
+                    selected = selected,
+                    onClick = {
+                        navController.navigate(navItem.route) {
+                            popUpTo(navController.graph.findStartDestination().id) {
+                                saveState = true
+                            }
+                            // Avoid multiple copies of the same destination when
+                            // reselecting the same item
+                            launchSingleTop = true
+                            // Restore state when reselecting a previously selected item
+                            restoreState = true
                         }
-                        // Avoid multiple copies of the same destination when
-                        // reselecting the same item
-                        launchSingleTop = true
-                        // Restore state when reselecting a previously selected item
-                        restoreState = true
-                    }
-                },
-                icon = {
-                    Icon(
-                        navItem.icon,
-                        contentDescription = navItem.title,
-                        tint = if (selected) MaterialTheme.colors.secondaryVariant else Color.Gray
-                    )
-                },
-                label = {
-                    Text(
-                        navItem.title,
-                        style = TextStyle(
-                            color =
-                            if (selected) MaterialTheme.colors.secondaryVariant else Color.Gray
+                    },
+                    icon = {
+                        Icon(
+                                navItem.icon,
+                                contentDescription = navItem.title,
+                                tint = if (selected)
+                                    MaterialTheme.colors.secondaryVariant
+                                else Color.Gray
                         )
-                    )
-                }
+                    },
+                    label = {
+                        Text(navItem.title,
+                                style = TextStyle(
+                                        color =
+                                        if (selected)
+                                            MaterialTheme.colors.secondaryVariant
+                                        else Color.Gray
+                                )
+                        )
+                    }
             )
         }
     }

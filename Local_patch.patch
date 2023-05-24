@@ -1,0 +1,603 @@
+Index: app/src/main/java/com/karan/coingecko/demo/ui/auth/screens/login/LoginScreen.kt
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/app/src/main/java/com/karan/coingecko/demo/ui/auth/screens/login/LoginScreen.kt b/app/src/main/java/com/karan/coingecko/demo/ui/auth/screens/login/LoginScreen.kt
+--- a/app/src/main/java/com/karan/coingecko/demo/ui/auth/screens/login/LoginScreen.kt	(revision 3bbeaf819a773603fc6d28c2c079af9e2764cbb8)
++++ b/app/src/main/java/com/karan/coingecko/demo/ui/auth/screens/login/LoginScreen.kt	(date 1684934407563)
+@@ -1,19 +1,11 @@
+ package com.karan.coingecko.demo.ui.auth.screens.login
+ 
+-import androidx.compose.foundation.layout.Box
+-import androidx.compose.foundation.layout.Column
+-import androidx.compose.foundation.layout.Spacer
+-import androidx.compose.foundation.layout.fillMaxHeight
+-import androidx.compose.foundation.layout.fillMaxSize
+-import androidx.compose.foundation.layout.height
+-import androidx.compose.foundation.layout.padding
+-import androidx.compose.foundation.layout.width
++import androidx.compose.foundation.gestures.detectTapGestures
++import androidx.compose.foundation.layout.*
+ import androidx.compose.foundation.rememberScrollState
+-import androidx.compose.foundation.shape.RoundedCornerShape
+ import androidx.compose.foundation.text.ClickableText
+ import androidx.compose.foundation.text.KeyboardOptions
+ import androidx.compose.foundation.verticalScroll
+-import androidx.compose.material.Button
+ import androidx.compose.material.MaterialTheme
+ import androidx.compose.material.OutlinedTextField
+ import androidx.compose.material.Scaffold
+@@ -23,6 +15,8 @@
+ import androidx.compose.runtime.remember
+ import androidx.compose.ui.Alignment
+ import androidx.compose.ui.Modifier
++import androidx.compose.ui.focus.FocusRequester
++import androidx.compose.ui.input.pointer.pointerInput
+ import androidx.compose.ui.text.AnnotatedString
+ import androidx.compose.ui.text.TextStyle
+ import androidx.compose.ui.text.font.FontFamily
+@@ -33,90 +27,90 @@
+ import androidx.compose.ui.unit.sp
+ import androidx.hilt.navigation.compose.hiltViewModel
+ import com.karan.coingecko.demo.ui.MultiPreview
++import com.karan.coingecko.demo.ui.theme.CoinGeckoEditField
++import com.karan.coingecko.demo.ui.theme.CoinGeckoRoundedCornerButton
+ 
+ 
+ @Composable
+ fun LoginRoutes(
+-    navigateToSignUp: () -> Unit,
+-    navigateToForgotPassword: () -> Unit,
+-    loginViewModel: LoginViewModel = hiltViewModel()
++        navigateToSignUp: () -> Unit,
++        navigateToForgotPassword: () -> Unit,
++        loginViewModel: LoginViewModel = hiltViewModel()
+ ) {
+-    LoginScreen(navigateToSignUp, navigateToForgotPassword, loginViewModel::login)
++    LoginScreen(navigateToSignUp,
++            navigateToForgotPassword,
++            loginViewModel::login)
+ }
+ 
+ @Composable
+ fun LoginScreen(
+-    navigateToSignUp: () -> Unit,
+-    navigateToForgotPassword: () -> Unit,
+-    onLoginClick: () -> Unit
++        navigateToSignUp: () -> Unit,
++        navigateToForgotPassword: () -> Unit,
++        onLoginClick: () -> Unit
+ ) {
+     val userNameInput = remember { mutableStateOf("Dummy Username") }
+     val passwordInput = remember { mutableStateOf("Password") }
+ 
+     Scaffold(modifier = Modifier.fillMaxHeight()) { padding ->
+         Column(
+-            modifier = Modifier
+-                .padding(top = 100.dp)
+-                .verticalScroll(rememberScrollState())
+-                .fillMaxHeight(),
+-            horizontalAlignment = Alignment.CenterHorizontally
++                modifier = Modifier
++                        .padding(top = 100.dp)
++                        .verticalScroll(rememberScrollState())
++                        .padding(padding)
++                        .fillMaxHeight(),
++                horizontalAlignment = Alignment.CenterHorizontally
+         ) {
+ 
+-            Text(text = "Login", style = TextStyle(fontSize = 40.sp, fontFamily = FontFamily.Serif))
++            Text(text = "Login", style = TextStyle(fontSize = 40.sp,
++                    fontFamily = FontFamily.Serif))
+ 
+             Spacer(modifier = Modifier.height(20.dp))
+-            OutlinedTextField(
+-                label = { Text(text = "Username") },
+-                value = userNameInput.value,
+-                onValueChange = { userNameInput.value = it })
++
++            CoinGeckoEditField(title = "Username",
++                    state = userNameInput)
+ 
+             Spacer(modifier = Modifier.height(20.dp))
+-            OutlinedTextField(
+-                label = { Text(text = "Password") },
+-                value = passwordInput.value,
+-                visualTransformation = PasswordVisualTransformation(),
+-                keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Password),
+-                onValueChange = { passwordInput.value = it })
++
++            CoinGeckoEditField(title = "Password",
++                    state = passwordInput,
++                    KeyboardOptions(keyboardType = KeyboardType.Password),
++                    PasswordVisualTransformation())
+ 
+             Spacer(modifier = Modifier.height(20.dp))
+-            Button(
+-                onClick = { onLoginClick() },
+-                shape = RoundedCornerShape(50.dp),
+-                modifier = Modifier
+-                    .height(50.dp)
+-                    .width(200.dp)
+-            ) {
+-                Text(text = "Login")
++
++            CoinGeckoRoundedCornerButton("Login") {
++                onLoginClick()
+             }
+ 
+             Spacer(modifier = Modifier.height(20.dp))
+             ClickableText(
+-                text = AnnotatedString("Forgot password?"),
+-                onClick = { navigateToForgotPassword() },
+-                style = TextStyle(
+-                    fontSize = 14.sp,
+-                    fontFamily = FontFamily.Default,
+-                    color = MaterialTheme.colors.onBackground
+-                )
++                    text = AnnotatedString("Forgot password?"),
++                    onClick = { navigateToForgotPassword() },
++                    style = TextStyle(
++                            fontSize = 14.sp,
++                            fontFamily = FontFamily.Default,
++                            color = MaterialTheme.colors.onBackground
++                    )
+             )
+             Box(modifier = Modifier.fillMaxSize()) {
+                 ClickableText(
+-                    text = AnnotatedString("Sign up here"),
+-                    modifier = Modifier
+-                        .align(Alignment.BottomCenter)
+-                        .padding(20.dp),
+-                    onClick = { navigateToSignUp() },
+-                    style = TextStyle(
+-                        fontSize = 14.sp,
+-                        textDecoration = TextDecoration.Underline,
+-                        color = MaterialTheme.colors.onBackground
+-                    )
++                        text = AnnotatedString("Sign up here"),
++                        modifier = Modifier
++                                .align(Alignment.BottomCenter)
++                                .padding(20.dp),
++                        onClick = { navigateToSignUp() },
++                        style = TextStyle(
++                                fontSize = 14.sp,
++                                textDecoration = TextDecoration.Underline,
++                                color = MaterialTheme.colors.onBackground
++                        )
+                 )
+             }
+         }
+     }
+ }
+ 
++
+ @MultiPreview
+ @Composable
+ fun LoginScreenPreview() {
+Index: app/src/main/java/com/karan/coingecko/demo/ui/dashboard/favorites/navigation/FavouriteNavigation.kt
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/app/src/main/java/com/karan/coingecko/demo/ui/dashboard/favorites/navigation/FavouriteNavigation.kt b/app/src/main/java/com/karan/coingecko/demo/ui/dashboard/favorites/navigation/FavouriteNavigation.kt
+--- a/app/src/main/java/com/karan/coingecko/demo/ui/dashboard/favorites/navigation/FavouriteNavigation.kt	(revision 3bbeaf819a773603fc6d28c2c079af9e2764cbb8)
++++ b/app/src/main/java/com/karan/coingecko/demo/ui/dashboard/favorites/navigation/FavouriteNavigation.kt	(date 1684922865319)
+@@ -1,10 +1,11 @@
+-package com.karan.coingecko.demo.ui.dashboard
++package com.karan.coingecko.demo.ui.dashboard.favorites.navigation
+ 
+ import androidx.navigation.NavGraphBuilder
+ import androidx.navigation.compose.composable
+ import androidx.navigation.navigation
+ import com.karan.coingecko.demo.navigation.CoinGeckoGraphs
+ import com.karan.coingecko.demo.navigation.CoinGeckoNavigationActions
++import com.karan.coingecko.demo.ui.dashboard.favorites.screens.FavouritesRoute
+ 
+ const val favourites = "favourites"
+ 
+Index: app/src/main/java/com/karan/coingecko/demo/ui/dashboard/favorites/screens/FavouritesScreen.kt
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/app/src/main/java/com/karan/coingecko/demo/ui/dashboard/favorites/screens/FavouritesScreen.kt b/app/src/main/java/com/karan/coingecko/demo/ui/dashboard/favorites/screens/FavouritesScreen.kt
+--- a/app/src/main/java/com/karan/coingecko/demo/ui/dashboard/favorites/screens/FavouritesScreen.kt	(revision 3bbeaf819a773603fc6d28c2c079af9e2764cbb8)
++++ b/app/src/main/java/com/karan/coingecko/demo/ui/dashboard/favorites/screens/FavouritesScreen.kt	(date 1684922805429)
+@@ -1,4 +1,4 @@
+-package com.karan.coingecko.demo.ui.dashboard
++package com.karan.coingecko.demo.ui.dashboard.favorites.screens
+ 
+ import androidx.compose.foundation.layout.Arrangement
+ import androidx.compose.foundation.layout.Column
+Index: app/src/main/java/com/karan/coingecko/demo/ui/auth/navigation/AuthNavigations.kt
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/app/src/main/java/com/karan/coingecko/demo/ui/auth/navigation/AuthNavigations.kt b/app/src/main/java/com/karan/coingecko/demo/ui/auth/navigation/AuthNavigations.kt
+--- a/app/src/main/java/com/karan/coingecko/demo/ui/auth/navigation/AuthNavigations.kt	(revision 3bbeaf819a773603fc6d28c2c079af9e2764cbb8)
++++ b/app/src/main/java/com/karan/coingecko/demo/ui/auth/navigation/AuthNavigations.kt	(date 1684922865338)
+@@ -4,7 +4,7 @@
+ import androidx.navigation.compose.composable
+ import androidx.navigation.navigation
+ import com.karan.coingecko.demo.navigation.CoinGeckoGraphs
+-import com.karan.coingecko.demo.ui.auth.SignupRoute
++import com.karan.coingecko.demo.ui.auth.screens.signup.SignupRoute
+ import com.karan.coingecko.demo.ui.auth.screens.forgotpassword.ForgotPasswordRoute
+ import com.karan.coingecko.demo.ui.auth.screens.login.LoginRoutes
+ 
+Index: app/src/main/java/com/karan/coingecko/demo/ui/auth/screens/signup/Signup.kt
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/app/src/main/java/com/karan/coingecko/demo/ui/auth/screens/signup/Signup.kt b/app/src/main/java/com/karan/coingecko/demo/ui/auth/screens/signup/Signup.kt
+--- a/app/src/main/java/com/karan/coingecko/demo/ui/auth/screens/signup/Signup.kt	(revision 3bbeaf819a773603fc6d28c2c079af9e2764cbb8)
++++ b/app/src/main/java/com/karan/coingecko/demo/ui/auth/screens/signup/Signup.kt	(date 1684934474283)
+@@ -1,15 +1,7 @@
+-package com.karan.coingecko.demo.ui.auth
++package com.karan.coingecko.demo.ui.auth.screens.signup
+ 
+-import androidx.compose.foundation.layout.Arrangement
+-import androidx.compose.foundation.layout.Column
+-import androidx.compose.foundation.layout.Spacer
+-import androidx.compose.foundation.layout.fillMaxSize
+-import androidx.compose.foundation.layout.fillMaxWidth
+-import androidx.compose.foundation.layout.height
+-import androidx.compose.foundation.layout.padding
+-import androidx.compose.foundation.shape.RoundedCornerShape
++import androidx.compose.foundation.layout.*
+ import androidx.compose.foundation.text.KeyboardOptions
+-import androidx.compose.material.Button
+ import androidx.compose.material.OutlinedTextField
+ import androidx.compose.material.Surface
+ import androidx.compose.material.Text
+@@ -25,6 +17,7 @@
+ import androidx.compose.ui.unit.dp
+ import androidx.compose.ui.unit.sp
+ import com.karan.coingecko.demo.ui.MultiPreview
++import com.karan.coingecko.demo.ui.theme.CoinGeckoRoundedCornerButton
+ 
+ @Composable
+ fun SignupRoute() {
+@@ -37,39 +30,35 @@
+     val passwordInput = remember { mutableStateOf("Password") }
+ 
+     Column(
+-        modifier = Modifier
+-            .padding(20.dp)
+-            .fillMaxSize(),
+-        verticalArrangement = Arrangement.Center,
+-        horizontalAlignment = Alignment.CenterHorizontally
++            modifier = Modifier
++                    .padding(20.dp)
++                    .fillMaxSize(),
++            verticalArrangement = Arrangement.Center,
++            horizontalAlignment = Alignment.CenterHorizontally
+     ) {
+ 
+-        Text(text = "Signup", style = TextStyle(fontSize = 40.sp, fontFamily = FontFamily.Serif))
++        Text(text = "Signup", style = TextStyle(
++                fontSize = 40.sp,
++                fontFamily = FontFamily.Serif))
+ 
+         Spacer(modifier = Modifier.height(20.dp))
+         OutlinedTextField(
+-            label = { Text(text = "Username") },
+-            value = userNameInput.value,
+-            onValueChange = { userNameInput.value = it })
++                label = { Text(text = "Username") },
++                value = userNameInput.value,
++                onValueChange = { userNameInput.value = it })
+ 
+         Spacer(modifier = Modifier.height(20.dp))
+         OutlinedTextField(
+-            label = { Text(text = "Password") },
+-            value = passwordInput.value,
+-            visualTransformation = PasswordVisualTransformation(),
+-            keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Password),
+-            onValueChange = { passwordInput.value = it })
++                label = { Text(text = "Password") },
++                value = passwordInput.value,
++                visualTransformation = PasswordVisualTransformation(),
++                keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Password),
++                onValueChange = { passwordInput.value = it })
+ 
+         Spacer(modifier = Modifier.height(20.dp))
+         Surface(modifier = Modifier.padding(40.dp, 0.dp, 40.dp, 0.dp)) {
+-            Button(
+-                onClick = { },
+-                shape = RoundedCornerShape(50.dp),
+-                modifier = Modifier
+-                    .fillMaxWidth()
+-                    .height(50.dp)
+-            ) {
+-                Text(text = "Signup")
++            CoinGeckoRoundedCornerButton(title = "Signup") {
++
+             }
+         }
+     }
+Index: app/src/main/java/com/karan/coingecko/demo/ui/CoinGeckoApp.kt
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/app/src/main/java/com/karan/coingecko/demo/ui/CoinGeckoApp.kt b/app/src/main/java/com/karan/coingecko/demo/ui/CoinGeckoApp.kt
+--- a/app/src/main/java/com/karan/coingecko/demo/ui/CoinGeckoApp.kt	(revision 3bbeaf819a773603fc6d28c2c079af9e2764cbb8)
++++ b/app/src/main/java/com/karan/coingecko/demo/ui/CoinGeckoApp.kt	(date 1684934509344)
+@@ -35,8 +35,8 @@
+ import com.karan.coingecko.demo.navigation.CoinGeckoNavigationActions
+ import com.karan.coingecko.demo.ui.auth.navigation.authScreenGraph
+ import com.karan.coingecko.demo.ui.auth.screens.LoginState
+-import com.karan.coingecko.demo.ui.dashboard.favourites
+-import com.karan.coingecko.demo.ui.dashboard.favouritesGraph
++import com.karan.coingecko.demo.ui.dashboard.favorites.navigation.favourites
++import com.karan.coingecko.demo.ui.dashboard.favorites.navigation.favouritesGraph
+ import com.karan.coingecko.demo.ui.dashboard.settings.navigation.settings
+ import com.karan.coingecko.demo.ui.dashboard.settings.navigation.settingsGraph
+ import com.karan.coingecko.demo.ui.dashboard.topcoins.navigation.topCoinGraph
+@@ -52,44 +52,46 @@
+         CoinGeckoNavigationActions(navController)
+     }
+     val loginState =
+-        userState.collectAsStateWithLifecycle(initialValue = LoginState.Loading)
++            userState.collectAsStateWithLifecycle(initialValue = LoginState.Loading)
+ 
+     val initialRoute =
+-        if (loginState.value == LoginState.NotLoggedIn) CoinGeckoGraphs.AUTH_ROUTE_GRAPH
+-        else CoinGeckoGraphs.TOP_COINS_GRAPH
++            if (loginState.value == LoginState.NotLoggedIn)
++                CoinGeckoGraphs.AUTH_ROUTE_GRAPH
++            else CoinGeckoGraphs.TOP_COINS_GRAPH
+ 
+     MainNavHost(
+-        navController = navController,
+-        loginState = loginState,
+-        navigationAction = navigationAction,
+-        initialRoute = initialRoute
++            navController = navController,
++            loginState = loginState,
++            navigationAction = navigationAction,
++            initialRoute = initialRoute
+     )
+ }
+ 
+ @Composable
+ fun MainNavHost(
+-    navController: NavHostController,
+-    loginState: State<LoginState>,
+-    navigationAction: CoinGeckoNavigationActions,
+-    initialRoute: String
++        navController: NavHostController,
++        loginState: State<LoginState>,
++        navigationAction: CoinGeckoNavigationActions,
++        initialRoute: String
+ ) {
+     Scaffold(
+-        backgroundColor = MaterialTheme.colors.background,
+-        bottomBar = {
+-            if (loginState.value == LoginState.LoggedIn) CoinGeckoBottomBar(navController)
+-        }) { padding ->
++            backgroundColor = MaterialTheme.colors.background,
++            bottomBar = {
++                if (loginState.value == LoginState.LoggedIn)
++                    CoinGeckoBottomBar(navController)
++            }) { padding ->
+         Surface(
+-            Modifier
+-                .fillMaxSize()
+-                .padding(padding)
++                Modifier
++                        .fillMaxSize()
++                        .padding(padding)
+         ) {
+             // Single NavHost for hosting all screens
+             NavHost(
+-                navController, startDestination = initialRoute
++                    navController, startDestination = initialRoute
+             ) {
+                 authScreenGraph(
+-                    navigationAction.navigateTeSignUp,
+-                    navigationAction.navigateTeForgotPassword
++                        navigationAction.navigateTeSignUp,
++                        navigationAction.navigateTeForgotPassword
+                 )
+ 
+                 topCoinGraph(navigationAction)
+@@ -108,51 +110,54 @@
+     val currentRoute = navBackStackEntry?.destination?.route
+ 
+     val topLevelDestinations = listOf(
+-        NavItem(topCoins, Icons.Outlined.Home, "Explore"),
+-        NavItem(favourites, Icons.Outlined.Star, "Favourites"),
+-        NavItem(settings, Icons.Outlined.Menu, "More")
++            NavItem(topCoins, Icons.Outlined.Home, "Explore"),
++            NavItem(favourites, Icons.Outlined.Star, "Favourites"),
++            NavItem(settings, Icons.Outlined.Menu, "More")
+     )
+ 
+     BottomNavigation(
+ 
+-        modifier = Modifier
+-            .clip(CircleShape)
+-            .padding(10.dp),
+-        backgroundColor = MaterialTheme.colors.primarySurface
++            modifier = Modifier
++                    .clip(CircleShape)
++                    .padding(10.dp),
++            backgroundColor = MaterialTheme.colors.primarySurface
+     ) {
+         topLevelDestinations.forEach { navItem ->
+             val selected = currentRoute == navItem.route
+             BottomNavigationItem(
+-                alwaysShowLabel = false,
+-                selected = selected,
+-                onClick = {
+-                    navController.navigate(navItem.route) {
+-                        popUpTo(navController.graph.findStartDestination().id) {
+-                            saveState = true
+-                        }
+-                        // Avoid multiple copies of the same destination when
+-                        // reselecting the same item
+-                        launchSingleTop = true
+-                        // Restore state when reselecting a previously selected item
+-                        restoreState = true
+-                    }
+-                },
+-                icon = {
+-                    Icon(
+-                        navItem.icon,
+-                        contentDescription = navItem.title,
+-                        tint = if (selected) MaterialTheme.colors.secondaryVariant else Color.Gray
+-                    )
+-                },
+-                label = {
+-                    Text(
+-                        navItem.title,
+-                        style = TextStyle(
+-                            color =
+-                            if (selected) MaterialTheme.colors.secondaryVariant else Color.Gray
+-                        )
+-                    )
+-                }
++                    alwaysShowLabel = false,
++                    selected = selected,
++                    onClick = {
++                        navController.navigate(navItem.route) {
++                            popUpTo(navController.graph.findStartDestination().id) {
++                                saveState = true
++                            }
++                            // Avoid multiple copies of the same destination when
++                            // reselecting the same item
++                            launchSingleTop = true
++                            // Restore state when reselecting a previously selected item
++                            restoreState = true
++                        }
++                    },
++                    icon = {
++                        Icon(
++                                navItem.icon,
++                                contentDescription = navItem.title,
++                                tint = if (selected)
++                                    MaterialTheme.colors.secondaryVariant
++                                else Color.Gray
++                        )
++                    },
++                    label = {
++                        Text(navItem.title,
++                                style = TextStyle(
++                                        color =
++                                        if (selected)
++                                            MaterialTheme.colors.secondaryVariant
++                                        else Color.Gray
++                                )
++                        )
++                    }
+             )
+         }
+     }
+Index: app/src/main/java/com/karan/coingecko/demo/ui/auth/screens/forgotpassword/ForgotPassword.kt
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/app/src/main/java/com/karan/coingecko/demo/ui/auth/screens/forgotpassword/ForgotPassword.kt b/app/src/main/java/com/karan/coingecko/demo/ui/auth/screens/forgotpassword/ForgotPassword.kt
+--- a/app/src/main/java/com/karan/coingecko/demo/ui/auth/screens/forgotpassword/ForgotPassword.kt	(revision 3bbeaf819a773603fc6d28c2c079af9e2764cbb8)
++++ b/app/src/main/java/com/karan/coingecko/demo/ui/auth/screens/forgotpassword/ForgotPassword.kt	(date 1684933961264)
+@@ -1,15 +1,7 @@
+ package com.karan.coingecko.demo.ui.auth.screens.forgotpassword
+ 
+-import androidx.compose.foundation.layout.Arrangement
+-import androidx.compose.foundation.layout.Column
+-import androidx.compose.foundation.layout.Spacer
+-import androidx.compose.foundation.layout.fillMaxSize
+-import androidx.compose.foundation.layout.fillMaxWidth
+-import androidx.compose.foundation.layout.height
+-import androidx.compose.foundation.layout.padding
+-import androidx.compose.foundation.shape.RoundedCornerShape
+-import androidx.compose.material.Button
+-import androidx.compose.material.OutlinedTextField
++import androidx.compose.foundation.layout.*
++import androidx.compose.foundation.text.KeyboardOptions
+ import androidx.compose.material.Surface
+ import androidx.compose.material.Text
+ import androidx.compose.runtime.Composable
+@@ -17,8 +9,14 @@
+ import androidx.compose.runtime.remember
+ import androidx.compose.ui.Alignment
+ import androidx.compose.ui.Modifier
++import androidx.compose.ui.text.TextStyle
++import androidx.compose.ui.text.font.FontFamily
++import androidx.compose.ui.text.input.KeyboardType
+ import androidx.compose.ui.unit.dp
++import androidx.compose.ui.unit.sp
+ import com.karan.coingecko.demo.ui.MultiPreview
++import com.karan.coingecko.demo.ui.theme.CoinGeckoEditField
++import com.karan.coingecko.demo.ui.theme.CoinGeckoRoundedCornerButton
+ 
+ 
+ @Composable
+@@ -30,29 +28,26 @@
+ private fun ForgotPasswordScreen() {
+     val userNameInput = remember { mutableStateOf("Dummy Email") }
+     Column(
+-        modifier = Modifier
+-            .padding(20.dp)
+-            .fillMaxSize(),
+-        verticalArrangement = Arrangement.Center,
+-        horizontalAlignment = Alignment.CenterHorizontally
++            modifier = Modifier
++                    .padding(20.dp)
++                    .fillMaxSize(),
++            verticalArrangement = Arrangement.Center,
++            horizontalAlignment = Alignment.CenterHorizontally
+     ) {
+ 
++        Text(
++                text = "Forgot Password",
++                style = TextStyle(fontSize = 40.sp, fontFamily = FontFamily.Serif)
++        )
+ 
+-        OutlinedTextField(
+-            label = { Text(text = "Email") },
+-            value = userNameInput.value,
+-            onValueChange = { userNameInput.value = it})
++        CoinGeckoEditField(title = "Email",
++                state = userNameInput)
+ 
+         Spacer(modifier = Modifier.height(20.dp))
++
+         Surface(modifier = Modifier.padding(40.dp, 0.dp, 40.dp, 0.dp)) {
+-            Button(
+-                onClick = { },
+-                shape = RoundedCornerShape(50.dp),
+-                modifier = Modifier
+-                    .fillMaxWidth()
+-                    .height(50.dp)
+-            ) {
+-                Text(text = "Submit")
++            CoinGeckoRoundedCornerButton(title = "Submit") {
++
+             }
+         }
+     }
+Index: app/src/main/java/com/karan/coingecko/demo/ui/dashboard/topcoins/screens/TopCoinsViewModel.kt
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/app/src/main/java/com/karan/coingecko/demo/ui/dashboard/topcoins/screens/TopCoinsViewModel.kt b/app/src/main/java/com/karan/coingecko/demo/ui/dashboard/topcoins/screens/TopCoinsViewModel.kt
+--- a/app/src/main/java/com/karan/coingecko/demo/ui/dashboard/topcoins/screens/TopCoinsViewModel.kt	(revision 3bbeaf819a773603fc6d28c2c079af9e2764cbb8)
++++ b/app/src/main/java/com/karan/coingecko/demo/ui/dashboard/topcoins/screens/TopCoinsViewModel.kt	(date 1684922865332)
+@@ -19,7 +19,7 @@
+ @HiltViewModel
+ class TopCoinsViewModel @Inject constructor(
+     private val topCoinRepository: TopCoinsRepository,
+-    private val appDispatchers: AppDispatchers,
++    appDispatchers: AppDispatchers,
+ ) :
+     ViewModel() {
+     val coinData: StateFlow<TopCoinsUiState> =

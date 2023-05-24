@@ -1,4 +1,4 @@
-package com.karan.coingecko.demo.ui.dashboard
+package com.karan.coingecko.demo.ui.dashboard.favorites.screens
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column

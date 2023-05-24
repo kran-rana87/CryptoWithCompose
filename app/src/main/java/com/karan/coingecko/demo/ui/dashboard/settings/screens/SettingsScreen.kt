@@ -23,6 +23,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.karan.coingecko.demo.ui.CoinGeckoAppBar
@@ -53,11 +54,11 @@ internal fun SettingsScreen(onLogoutClick: () -> Unit) {
             Column {
                 Card(elevation = 5.dp,
                     modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(10.dp)
-                        .clickable {
-                            logoutConfirmation.value = true
-                        })
+                            .fillMaxWidth()
+                            .padding(10.dp)
+                            .clickable {
+                                logoutConfirmation.value = true
+                            })
                 {
                     Row(modifier = Modifier.padding(20.dp)) {
                         Text(text = "Logout")
@@ -66,8 +67,8 @@ internal fun SettingsScreen(onLogoutClick: () -> Unit) {
                 Card(
                     elevation = 5.dp,
                     modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(10.dp)
+                            .fillMaxWidth()
+                            .padding(10.dp)
 
                 ) {
                     Column {
@@ -75,8 +76,8 @@ internal fun SettingsScreen(onLogoutClick: () -> Unit) {
                         Row(
                             verticalAlignment = Alignment.CenterVertically,
                             modifier = Modifier
-                                .fillMaxWidth()
-                                .padding(start = 20.dp, end = 20.dp),
+                                    .fillMaxWidth()
+                                    .padding(start = 20.dp, end = 20.dp),
                             horizontalArrangement = Arrangement.SpaceBetween
                         ) {
                             Text(text = "DarkMode")
@@ -87,8 +88,8 @@ internal fun SettingsScreen(onLogoutClick: () -> Unit) {
                         Row(
                             verticalAlignment = Alignment.CenterVertically,
                             modifier = Modifier
-                                .fillMaxWidth()
-                                .padding(20.dp),
+                                    .fillMaxWidth()
+                                    .padding(20.dp),
                             horizontalArrangement = Arrangement.SpaceBetween
                         ) {
                             Text(text = "Profile")
@@ -108,15 +109,14 @@ fun alertDialog(
     logoutConfirmation: MutableState<Boolean>
 ) {
     AlertDialog(
-        backgroundColor = MaterialTheme.colors.surface,
         onDismissRequest = { logoutConfirmation.value = false },
-        title = { Text(text = title) },
+            title = { Text(text = title) },
         confirmButton = {
             TextButton(onClick = {
                 logoutConfirmation.value = false
                 onLogoutClick()
             })
-            { Text(text = "OK") }
+            { Text(text = "OK", style = TextStyle(color = MaterialTheme.colors.onBackground)) }
         },
     )
 }

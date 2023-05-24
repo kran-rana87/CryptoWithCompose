@@ -4,7 +4,7 @@ import androidx.navigation.NavGraphBuilder
 import androidx.navigation.compose.composable
 import androidx.navigation.navigation
 import com.karan.coingecko.demo.navigation.CoinGeckoGraphs
-import com.karan.coingecko.demo.ui.auth.SignupRoute
+import com.karan.coingecko.demo.ui.auth.screens.signup.SignupRoute
 import com.karan.coingecko.demo.ui.auth.screens.forgotpassword.ForgotPasswordRoute
 import com.karan.coingecko.demo.ui.auth.screens.login.LoginRoutes
 

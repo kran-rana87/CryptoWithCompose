@@ -19,7 +19,7 @@ import javax.inject.Inject
 @HiltViewModel
 class TopCoinsViewModel @Inject constructor(
     private val topCoinRepository: TopCoinsRepository,
-    private val appDispatchers: AppDispatchers,
+    appDispatchers: AppDispatchers,
 ) :
     ViewModel() {
     val coinData: StateFlow<TopCoinsUiState> =
@@ -36,7 +36,7 @@ class TopCoinsViewModel @Inject constructor(
             .flowOn(appDispatchers.io)
             .stateIn(
                 scope = viewModelScope,
-                started = SharingStarted.WhileSubscribed(),
+                started = SharingStarted.Lazily,
                 initialValue = TopCoinsUiState.Loading
             )
 
