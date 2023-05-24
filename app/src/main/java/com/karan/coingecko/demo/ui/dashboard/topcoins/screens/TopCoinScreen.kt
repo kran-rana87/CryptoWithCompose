@@ -12,6 +12,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
@@ -54,51 +55,75 @@ import com.karan.flow.demo.R
 @Composable
 internal fun TopCoinsRoute(topCoinsViewModel: TopCoinsViewModel = hiltViewModel()) {
     val coinData by topCoinsViewModel.coinData.collectAsStateWithLifecycle()
-    TopCoinsScreen(state = coinData, topCoinsViewModel::sortByName)
+    TopCoinsScreen(coinState = coinData, topCoinsViewModel::sortByName)
 }
 
-@OptIn(ExperimentalFoundationApi::class)
 @Composable
 internal fun TopCoinsScreen(
-    state: TopCoinsUiState,
+    coinState: TopCoinsUiState,
     sortByName: () -> Unit = {}
 ) {
     Scaffold(topBar = {
+
         CoinGeckoAppBar()
     }) { padding ->
         Box(modifier = Modifier.padding(padding)) {
-            when (state) {
+            when (coinState) {
                 is TopCoinsUiState.Success -> {
-                    val listState = rememberLazyListState()
-
-                    LazyColumn(state = listState) {
-                        stickyHeader {
-                            ListHeader(sortByName = sortByName)
-                        }
-                        items(state.feed.coinListDashboard, key = { it.id }) {
-                            CoinRow(itemScope = it)
-                        }
-                    }
+                    CoinList(sortByName, coinState)
                 }
                 is TopCoinsUiState.Loading -> {
-                    Column(
-                        modifier = Modifier.fillMaxSize(),
-                        verticalArrangement = Arrangement.Center,
-                        horizontalAlignment = Alignment.CenterHorizontally
-                    ) {
-                        CircularProgressIndicator(
-                            color = MaterialTheme.colors.secondaryVariant
-                        )
-                    }
+                    CoinLoading()
                 }
                 else -> {
-                    Text(text = "Welcome to Dashboard")
+                    CoinError()
                 }
             }
         }
     }
 }
 
+@OptIn(ExperimentalFoundationApi::class)
+@Composable
+fun CoinList(sortByName: () -> Unit, coinState: TopCoinsUiState.Success) {
+    val listState = rememberLazyListState()
+    LazyColumn(state = listState) {
+        stickyHeader {
+            ListHeader(sortByName = sortByName)
+        }
+        items(coinState.feed.coinListDashboard, key = { it.id }) {
+            CoinRow(itemScope = it)
+        }
+    }
+}
+
+@Composable
+fun CoinLoading() {
+    Column(
+        modifier = Modifier.fillMaxSize(),
+        verticalArrangement = Arrangement.Center,
+        horizontalAlignment = Alignment.CenterHorizontally
+    ) {
+        CircularProgressIndicator(
+            color = MaterialTheme.colors.secondaryVariant
+        )
+    }
+}
+
+@Composable
+fun CoinError() {
+    Column(
+        modifier = Modifier.fillMaxSize(),
+        verticalArrangement = Arrangement.Center,
+        horizontalAlignment = Alignment.CenterHorizontally
+    ) {
+        Icon(
+            modifier = Modifier.size(60.dp),
+            painter = painterResource(id = R.drawable.no_connectivity),
+            contentDescription = "Error while showing Coins"
+        )
+    }
+}
 
 @Composable
 internal fun ListHeader(
@@ -231,7 +256,7 @@ internal fun CoinImageResource(
 @MultiPreview
 fun TopCoinsScreenPreview() {
     TopCoinsScreen(
-        state = TopCoinsUiState.Success(
+        coinState = TopCoinsUiState.Success(
             TopCoinsData(
                 listOf(
                     Coin(1, "Bit", "37727.00", -12.3, "", 2.3, 2.3, false),

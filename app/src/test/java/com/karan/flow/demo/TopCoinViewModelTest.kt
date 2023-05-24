@@ -1,6 +1,7 @@
 package com.karan.flow.demo
 
 import app.cash.turbine.test
+import com.karan.coingecko.demo.common.utils.Resource
 import com.karan.coingecko.demo.domain.models.Coin
 import com.karan.coingecko.demo.domain.models.TopCoinsData
 import com.karan.coingecko.demo.network.repository.TopCoinsRepository
@@ -41,9 +42,9 @@ class TopCoinViewModelTest {
     @Test
     fun `coinDataState() - when coin data is emitted from repo- coinstate returns Success`() =
         runTest(appDispatcher.standardTestDispatcher) {
-            val mockData = TopCoinsData(
+            val mockData = Resource.Success(TopCoinsData(
                 listOf(Coin(2, "213", "123", 2.3, "", 2.3, 2.3))
-            )
+            ))
             topCoinsRepository.mockEmit(mockData)
 
             // Then
@@ -51,7 +52,7 @@ class TopCoinViewModelTest {
                 assertEquals(TopCoinsUiState.Loading, awaitItem())
                 awaitItem().let {
                     assertTrue(it is TopCoinsUiState.Success)
-                    assertEquals(mockData, (it as TopCoinsUiState.Success).feed)
+                    assertEquals(mockData.data, (it as TopCoinsUiState.Success).feed)
 
                 }
                 cancelAndIgnoreRemainingEvents()
@@ -60,17 +61,17 @@ class TopCoinViewModelTest {
 
 
     class MockToCoinRepo : TopCoinsRepository {
-        private val mockFlow: MutableSharedFlow<TopCoinsData> =
+        private val mockFlow: MutableSharedFlow<Resource<TopCoinsData>> =
             MutableSharedFlow(replay = 1, onBufferOverflow = BufferOverflow.DROP_OLDEST)
 
-        override fun fetchTopCoins(): Flow<TopCoinsData> {
+        override fun fetchTopCoins(): Flow<Resource<TopCoinsData>> {
             return mockFlow.map {
                 val result = it
                 result
             }
         }
 
-        fun mockEmit(mockedData: TopCoinsData) {
+        fun mockEmit(mockedData: Resource<TopCoinsData>) {
             mockFlow.tryEmit(mockedData)
         }
 
