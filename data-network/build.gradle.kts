@@ -42,7 +42,7 @@ dependencies {
     testImplementation(libs.mockito.core)
     testImplementation(libs.mockk.io)
     testImplementation(libs.mockito.kotlin)
-    testImplementation("app.cash.turbine:turbine:0.8.0")
+    testImplementation(libs.turbine)
     testImplementation(libs.junit)
     androidTestImplementation(libs.junit.ext)
 }
