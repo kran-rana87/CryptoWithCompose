@@ -2,33 +2,18 @@ package com.karan.coingecko.demo.ui.dashboard.topcoins.screens
 
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.ExperimentalLayoutApi
-import androidx.compose.foundation.layout.FlowRow
-import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.text.ClickableText
-import androidx.compose.material.CircularProgressIndicator
-import androidx.compose.material.Icon
-import androidx.compose.material.LocalTextStyle
-import androidx.compose.material.MaterialTheme
-import androidx.compose.material.Scaffold
-import androidx.compose.material.Text
+import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.KeyboardArrowDown
 import androidx.compose.material.icons.outlined.KeyboardArrowUp
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.State
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -50,13 +35,22 @@ import com.karan.coingecko.demo.domain.models.Coin
 import com.karan.coingecko.demo.domain.models.TopCoinsData
 import com.karan.coingecko.demo.ui.CoinGeckoAppBar
 import com.karan.coingecko.demo.ui.MultiPreview
+import com.karan.coingecko.demo.ui.AuthenticatedContentOrLogin
+import com.karan.coingecko.demo.ui.auth.screens.LoginState
 import com.karan.flow.demo.R
 
 @Composable
-internal fun TopCoinsRoute(topCoinsViewModel: TopCoinsViewModel = hiltViewModel()) {
+internal fun TopCoinsRoute(
+    topCoinsViewModel: TopCoinsViewModel = hiltViewModel(),
+    authState: State<LoginState>,
+    navigateToLogin: () -> Unit
+) {
     val coinData by topCoinsViewModel.coinData.collectAsStateWithLifecycle()
-    TopCoinsScreen(coinState = coinData, topCoinsViewModel::sortByName)
+    AuthenticatedContentOrLogin(authState, navigateToLogin) {
+        TopCoinsScreen(coinState = coinData, topCoinsViewModel::sortByName)
+    }
 }
+
 
 @Composable
 internal fun TopCoinsScreen(
@@ -180,7 +174,6 @@ internal fun CoinRow(itemScope: Coin) {
         modifier = Modifier
             .fillMaxWidth()
             .padding(10.dp),
-        verticalAlignment = Alignment.CenterVertically,
         horizontalArrangement = Arrangement.SpaceBetween
     ) {
         Row(

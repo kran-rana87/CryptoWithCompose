@@ -8,12 +8,7 @@ import com.karan.coingecko.demo.domain.models.Coin
 import com.karan.coingecko.demo.domain.models.TopCoinsData
 import com.karan.coingecko.demo.network.repository.TopCoinsRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.SharingStarted
-import kotlinx.coroutines.flow.StateFlow
-import kotlinx.coroutines.flow.flowOn
-import kotlinx.coroutines.flow.map
-import kotlinx.coroutines.flow.stateIn
+import kotlinx.coroutines.flow.*
 import javax.inject.Inject
 
 @HiltViewModel
