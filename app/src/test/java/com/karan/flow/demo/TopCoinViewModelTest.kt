@@ -4,7 +4,7 @@ import app.cash.turbine.test
 import com.karan.coingecko.demo.common.utils.Response
 import com.karan.coingecko.demo.domain.models.Coin
 import com.karan.coingecko.demo.domain.models.TopCoinsData
-import com.karan.coingecko.demo.network.repository.TopCoinsRepository
+import com.karan.coingecko.demo.domain.repository.TopCoinsRepository
 import com.karan.coingecko.demo.ui.dashboard.topcoins.screens.TopCoinsUiState
 import com.karan.coingecko.demo.ui.dashboard.topcoins.screens.TopCoinsViewModel
 import kotlinx.coroutines.channels.BufferOverflow

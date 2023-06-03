@@ -2,19 +2,19 @@ package com.karan.coingecko.demo.ui.dashboard.topcoins.screens
 
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.shape.CircleShape
-import androidx.compose.foundation.text.ClickableText
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.outlined.FavoriteBorder
 import androidx.compose.material.icons.outlined.KeyboardArrowDown
 import androidx.compose.material.icons.outlined.KeyboardArrowUp
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.State
-import androidx.compose.runtime.getValue
+import androidx.compose.material.icons.outlined.Star
+import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -23,7 +23,6 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalInspectionMode
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
@@ -33,9 +32,9 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import coil.compose.AsyncImage
 import com.karan.coingecko.demo.domain.models.Coin
 import com.karan.coingecko.demo.domain.models.TopCoinsData
+import com.karan.coingecko.demo.ui.AuthenticatedContentOrLogin
 import com.karan.coingecko.demo.ui.CoinGeckoAppBar
 import com.karan.coingecko.demo.ui.MultiPreview
-import com.karan.coingecko.demo.ui.AuthenticatedContentOrLogin
 import com.karan.coingecko.demo.ui.auth.screens.LoginState
 import com.karan.flow.demo.R
 
@@ -46,8 +45,12 @@ internal fun TopCoinsRoute(
     navigateToLogin: () -> Unit
 ) {
     val coinData by topCoinsViewModel.coinData.collectAsStateWithLifecycle()
+
     AuthenticatedContentOrLogin(authState, navigateToLogin) {
-        TopCoinsScreen(coinState = coinData, topCoinsViewModel::sortByName)
+        TopCoinsScreen(
+            coinState = coinData,
+            topCoinsViewModel::sort,
+        )
     }
 }
 
@@ -55,16 +58,15 @@ internal fun TopCoinsRoute(
 @Composable
 internal fun TopCoinsScreen(
     coinState: TopCoinsUiState,
-    sortByName: () -> Unit = {}
+    sort: (TopCoinsViewModel.SortingMode) -> Unit = {}
 ) {
     Scaffold(topBar = {
-
         CoinGeckoAppBar()
     }) { padding ->
         Box(modifier = Modifier.padding(padding)) {
             when (coinState) {
                 is TopCoinsUiState.Success -> {
-                    CoinList(sortByName, coinState)
+                    CoinList(coinState, sort)
                 }
                 is TopCoinsUiState.Loading -> {
                     CoinLoading()
@@ -79,11 +81,14 @@ internal fun TopCoinsScreen(
 
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
-fun CoinList(sortByName: () -> Unit, coinState: TopCoinsUiState.Success) {
+fun CoinList(
+    coinState: TopCoinsUiState.Success,
+    sort: (TopCoinsViewModel.SortingMode) -> Unit,
+) {
     val listState = rememberLazyListState()
     LazyColumn(state = listState) {
         stickyHeader {
-            ListHeader(sortByName = sortByName)
+            ListHeader(sort = sort)
         }
         items(coinState.feed.coinListDashboard, key = { it.id }) {
             CoinRow(itemScope = it)
@@ -121,8 +126,9 @@ fun CoinError() {
 
 @Composable
 internal fun ListHeader(
-    sortByName: () -> Unit
+    sort: (TopCoinsViewModel.SortingMode) -> Unit,
 ) {
+
     Row(
         modifier = Modifier
             .fillMaxWidth()
@@ -134,19 +140,20 @@ internal fun ListHeader(
             modifier = Modifier
                 .width(120.dp)
                 .padding(start = 10.dp),
-            onClick = sortByName
+            onClick = { sort(TopCoinsViewModel.SortingMode.NAME_ASC) },
         )
         StickyHeaderText(
             title = "Price(AUD)",
-            modifier = Modifier.width(100.dp)
+            modifier = Modifier.width(100.dp),
+            onClick = { sort(TopCoinsViewModel.SortingMode.PRICE_ASC) },
         )
         StickyHeaderText(
             title = "Change(24 hr)",
             modifier = Modifier.fillMaxWidth(),
-            textStyle = TextStyle(textAlign = TextAlign.Right)
         )
     }
 }
+
 
 @Composable
 internal fun StickyHeaderText(
@@ -155,22 +162,23 @@ internal fun StickyHeaderText(
     textStyle: TextStyle = LocalTextStyle.current,
     onClick: () -> Unit = { }
 ) {
-    var style =
+    val style =
         textStyle.copy(MaterialTheme.colors.onBackground)
-    ClickableText(
-        text = AnnotatedString(title),
-        modifier = modifier,
-        style = style,
-    ) {
+    Row(horizontalArrangement = Arrangement.End, modifier = Modifier.clickable {
         onClick()
-
+    }) {
+        Text(
+            text = title,
+            modifier = modifier,
+            style = style,
+        )
     }
 }
 
 @OptIn(ExperimentalLayoutApi::class)
 @Composable
 internal fun CoinRow(itemScope: Coin) {
-    FlowRow(
+    Row(
         modifier = Modifier
             .fillMaxWidth()
             .padding(10.dp),
@@ -221,7 +229,7 @@ internal fun CoinRow(itemScope: Coin) {
                 contentDescription = "Change Percentage"
             )
         }
-
+        Icon(imageVector = Icons.Outlined.FavoriteBorder, contentDescription = null)
     }
 }
 
@@ -256,7 +264,7 @@ fun TopCoinsScreenPreview() {
                     Coin(2, "Bit", "200.00", 2.3, "", 2.3, 2.3, true)
                 )
             )
-        )
+        ),
     )
 }
 
