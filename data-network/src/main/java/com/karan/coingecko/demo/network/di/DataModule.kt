@@ -2,8 +2,8 @@ package com.karan.coingecko.demo.network.di
 
 import com.karan.coingecko.demo.network.impl.AuthRepositoryImpl
 import com.karan.coingecko.demo.network.impl.TopCoinsRepositoryImpl
-import com.karan.coingecko.demo.network.repository.AuthRepository
-import com.karan.coingecko.demo.network.repository.TopCoinsRepository
+import com.karan.coingecko.demo.domain.repository.AuthRepository
+import com.karan.coingecko.demo.domain.repository.TopCoinsRepository
 import dagger.Binds
 import dagger.Module
 import dagger.hilt.InstallIn

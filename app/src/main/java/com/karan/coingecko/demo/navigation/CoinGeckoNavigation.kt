@@ -1,6 +1,8 @@
 package com.karan.coingecko.demo.navigation
 
 import androidx.navigation.NavHostController
+import com.karan.coingecko.demo.navigation.CoinGeckoGraphs.AUTH_ROUTE_GRAPH
+import com.karan.coingecko.demo.navigation.CoinGeckoGraphs.TOP_COINS_GRAPH
 import com.karan.coingecko.demo.ui.auth.navigation.forgotPassword
 import com.karan.coingecko.demo.ui.auth.navigation.signUp
 
@@ -12,6 +14,20 @@ object CoinGeckoGraphs {
 }
 
 class CoinGeckoNavigationActions(navController: NavHostController) {
+
+    val navigateToLogin: () -> Unit = {
+        navController.navigate(AUTH_ROUTE_GRAPH) {
+            popUpTo(TOP_COINS_GRAPH){
+                inclusive = true
+            }
+        }
+    }
+
+    val navigateToDashboard: () -> Unit = {
+        navController.navigate(TOP_COINS_GRAPH) {
+            popUpTo(0)
+        }
+    }
 
     val navigateTeSignUp: () -> Unit = {
         navController.navigate(signUp) {

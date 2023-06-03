@@ -26,7 +26,6 @@ android {
 }
 
 dependencies {
-    implementation(project(":common"))
     implementation(project(":data-local"))
     implementation(project(":domain"))
 

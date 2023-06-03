@@ -27,7 +27,7 @@ class MainViewModel @Inject constructor(
         }
     }.flowOn(appDispatchers.io).stateIn(
         scope = viewModelScope,
-        started = SharingStarted.Eagerly,
+        started = SharingStarted.Lazily,
         initialValue = LoginState.Loading
     )
 

@@ -5,3 +5,7 @@ fun String.addPrefix(prefix: String, ignoreEmpty: Boolean = true): String {
     else if (this.startsWith(prefix)) this
     else "$prefix$this"
 }
+
+fun String.removeComma(): String {
+    return this.replace(",", "")
+}

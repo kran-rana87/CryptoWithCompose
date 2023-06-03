@@ -2,7 +2,6 @@ package com.karan.coingecko.demo.ui.auth.screens.signup
 
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.text.KeyboardOptions
-import androidx.compose.material.OutlinedTextField
 import androidx.compose.material.Surface
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
@@ -31,26 +30,31 @@ private fun Signup() {
     val passwordInput = remember { mutableStateOf("Password") }
 
     Column(
-            modifier = Modifier
-                    .padding(20.dp)
-                    .fillMaxSize(),
-            verticalArrangement = Arrangement.Center,
-            horizontalAlignment = Alignment.CenterHorizontally
+        modifier = Modifier
+            .padding(20.dp)
+            .fillMaxSize(),
+        verticalArrangement = Arrangement.Center,
+        horizontalAlignment = Alignment.CenterHorizontally
     ) {
 
-        Text(text = "Signup", style = TextStyle(
+        Text(
+            text = "Signup", style = TextStyle(
                 fontSize = 20.sp,
-                fontFamily = FontFamily.Serif))
+                fontFamily = FontFamily.Serif
+            )
+        )
 
         Spacer(modifier = Modifier.height(20.dp))
 
-        CoinGeckoEditField(title = "Username", state = userNameInput)
+        CoinGeckoEditField(state = userNameInput)
 
         Spacer(modifier = Modifier.height(20.dp))
 
-        CoinGeckoEditField(title = "Password", state = passwordInput,
-                visualTransformation = PasswordVisualTransformation(),
-                keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Password))
+        CoinGeckoEditField(
+            state = passwordInput,
+            visualTransformation = PasswordVisualTransformation(),
+            keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Password)
+        )
 
         Spacer(modifier = Modifier.height(20.dp))
 

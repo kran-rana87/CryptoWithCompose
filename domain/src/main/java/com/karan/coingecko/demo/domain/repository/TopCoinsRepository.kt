@@ -1,4 +1,4 @@
-package com.karan.coingecko.demo.network.repository
+package com.karan.coingecko.demo.domain.repository
 
 import com.karan.coingecko.demo.common.utils.Response
 import com.karan.coingecko.demo.domain.models.TopCoinsData

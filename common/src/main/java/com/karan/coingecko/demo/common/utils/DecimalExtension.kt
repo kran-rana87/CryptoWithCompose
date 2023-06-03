@@ -13,5 +13,4 @@ fun Double.round(decimals: Int): Double {
 fun Double.addComma(): String {
     val dform = DecimalFormat("#,###.####")
     return dform.format(this)
-
 }

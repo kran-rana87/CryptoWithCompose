@@ -10,7 +10,6 @@ import com.karan.coingecko.demo.ui.dashboard.favorites.screens.FavouritesRoute
 const val favourites = "favourites"
 
 fun NavGraphBuilder.favouritesGraph(
-    navigationAction: CoinGeckoNavigationActions,
 ) {
     navigation(
         startDestination = favourites,
