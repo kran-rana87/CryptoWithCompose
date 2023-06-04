@@ -23,6 +23,9 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalInspectionMode
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.semantics.clearAndSetSemantics
+import androidx.compose.ui.semantics.contentDescription
+import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
@@ -37,6 +40,7 @@ import com.karan.coingecko.demo.ui.CoinGeckoAppBar
 import com.karan.coingecko.demo.ui.MultiPreview
 import com.karan.coingecko.demo.ui.auth.screens.LoginState
 import com.karan.flow.demo.R
+import kotlinx.coroutines.launch
 
 @Composable
 internal fun TopCoinsRoute(
@@ -45,7 +49,6 @@ internal fun TopCoinsRoute(
     navigateToLogin: () -> Unit
 ) {
     val coinData by topCoinsViewModel.coinData.collectAsStateWithLifecycle()
-
     AuthenticatedContentOrLogin(authState, navigateToLogin) {
         TopCoinsScreen(
             coinState = coinData,
@@ -53,8 +56,6 @@ internal fun TopCoinsRoute(
         )
     }
 }
-
-
 @Composable
 internal fun TopCoinsScreen(
     coinState: TopCoinsUiState,
@@ -162,9 +163,14 @@ internal fun StickyHeaderText(
     textStyle: TextStyle = LocalTextStyle.current,
     onClick: () -> Unit = { }
 ) {
+    val cScope = rememberCoroutineScope()
     val style =
         textStyle.copy(MaterialTheme.colors.onBackground)
-    Row(horizontalArrangement = Arrangement.End, modifier = Modifier.clickable {
+    Row(horizontalArrangement = Arrangement.End,
+        modifier = Modifier.clickable {
+            cScope.launch {
+            }
+
         onClick()
     }) {
         Text(
@@ -180,6 +186,7 @@ internal fun StickyHeaderText(
 internal fun CoinRow(itemScope: Coin) {
     Row(
         modifier = Modifier
+            .semantics(mergeDescendants = true) {  }
             .fillMaxWidth()
             .padding(10.dp),
         horizontalArrangement = Arrangement.SpaceBetween
@@ -189,16 +196,20 @@ internal fun CoinRow(itemScope: Coin) {
         ) {
             CoinImageResource(headerImageUrl = itemScope.imageURL)
             Text(
-                text = itemScope.name, modifier = Modifier
+                text = itemScope.name,
+                modifier = Modifier
                     .padding(10.dp)
                     .width(50.dp)
-            )
+                    .semantics { this.contentDescription = "Coin Name: ${itemScope.name}" },
+
+                )
             Text(
                 text = itemScope.price,
                 style = TextStyle(textAlign = TextAlign.End),
                 modifier = Modifier
                     .padding(10.dp)
                     .width(80.dp)
+                    .semantics { this.contentDescription = ",price is $${itemScope.price}" },
             )
 
         }
@@ -214,10 +225,15 @@ internal fun CoinRow(itemScope: Coin) {
                     if (itemScope.isPositiveChange) colorResource(id = R.color.green_90)
                     else colorResource(id = R.color.red_90)
                 )
-        ) {
+            ) {
             Text(
                 text = itemScope.change24hr.toString() + "%",
-                modifier = Modifier.padding(5.dp), style = TextStyle(
+                modifier = Modifier.padding(5.dp)
+                    .semantics {
+                        this.contentDescription =  if (itemScope.isPositiveChange)
+                            "Last 24 hour change is Positive, %${itemScope.change24hr}" else
+                            "Last 24 hour change is Negative, %${itemScope.change24hr}"}
+                , style = TextStyle(
                     color = Color.White, fontSize = 10.sp
                 )
             )
@@ -226,10 +242,10 @@ internal fun CoinRow(itemScope: Coin) {
                 imageVector = if (itemScope.isPositiveChange)
                     Icons.Outlined.KeyboardArrowUp else
                     Icons.Outlined.KeyboardArrowDown,
-                contentDescription = "Change Percentage"
+                contentDescription = null
             )
         }
-        Icon(imageVector = Icons.Outlined.FavoriteBorder, contentDescription = null)
+        Icon(imageVector = Icons.Outlined.FavoriteBorder, contentDescription = "Tap to add this coin to favourites", modifier = Modifier.clickable { Unit })
     }
 }
 

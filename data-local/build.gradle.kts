@@ -28,12 +28,12 @@ android {
 dependencies {
 
     implementation(libs.data.store)
-    api(libs.hilt.android.testing)
-    api(libs.hilt.android)
-    api(libs.hilt.dagger)
-    api(libs.hilt.fragment.navigation)
-    api(libs.hilt.compose.navigation)
-    api(libs.dagger.compiler)
+    implementation(libs.hilt.android.testing)
+    implementation(libs.hilt.android)
+    implementation(libs.hilt.dagger)
+    implementation(libs.hilt.fragment.navigation)
+    implementation(libs.hilt.compose.navigation)
+    implementation(libs.dagger.compiler)
     kapt(libs.hilt.ext.compiler)
 
 }

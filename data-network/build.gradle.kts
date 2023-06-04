@@ -28,6 +28,7 @@ android {
 dependencies {
     implementation(project(":data-local"))
     implementation(project(":domain"))
+    implementation(project(":common"))
 
     kapt(libs.hilt.ext.compiler)
     implementation(libs.retrofit.client)
@@ -37,7 +38,12 @@ dependencies {
     implementation(libs.kotlinx.serialization.json)
     implementation(libs.kotlinx.serialization.converter)
     implementation(libs.compose.uitestjunit)
-
+    implementation(libs.hilt.android.testing)
+    implementation(libs.hilt.android)
+    implementation(libs.hilt.dagger)
+    implementation(libs.hilt.fragment.navigation)
+    implementation(libs.hilt.compose.navigation)
+    implementation(libs.dagger.compiler)
     testImplementation(libs.mockito.core)
     testImplementation(libs.mockk.io)
     testImplementation(libs.mockito.kotlin)
