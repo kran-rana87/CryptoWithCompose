@@ -82,14 +82,20 @@ class MainViewModelTest {
             mockFlow.tryEmit(isLoggedIn)
         }
 
+        override suspend fun updateFavCoins(coinId: String) {
+            TODO("Not yet implemented")
+        }
+
+        override fun fetchFavCoins(): Flow<List<String>> {
+            TODO("Not yet implemented")
+        }
+
         override fun fetchUserLoginState(): Flow<Boolean> {
             return mockFlow.map {
                 val result = it
                 result
             }
         }
-
-
     }
 }
 

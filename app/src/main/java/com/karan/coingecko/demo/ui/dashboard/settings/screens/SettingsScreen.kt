@@ -34,9 +34,7 @@ internal fun SettingsScreen(onLogoutClick: () -> Unit) {
     val darkModeState = rememberSaveable { mutableStateOf(true) }
     val logoutConfirmation = remember { mutableStateOf(false) }
 
-    Scaffold(topBar = {
-        CoinGeckoAppBar()
-    }) { padding ->
+    Scaffold() { padding ->
         if (logoutConfirmation.value) {
             alertDialog(
                 title = "Are you sure you want to Logout?",

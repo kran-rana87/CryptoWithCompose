@@ -1,5 +1,7 @@
 package com.karan.coingecko.demo.ui.dashboard.topcoins.screens
 
+import android.annotation.SuppressLint
+import androidx.compose.animation.core.*
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -10,10 +12,10 @@ import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.outlined.FavoriteBorder
+import androidx.compose.material.icons.filled.Favorite
+import androidx.compose.material.icons.filled.FavoriteBorder
 import androidx.compose.material.icons.outlined.KeyboardArrowDown
 import androidx.compose.material.icons.outlined.KeyboardArrowUp
-import androidx.compose.material.icons.outlined.Star
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -23,11 +25,10 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalInspectionMode
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.semantics.clearAndSetSemantics
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.contentDescription
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.text.TextStyle
-import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
@@ -40,34 +41,35 @@ import com.karan.coingecko.demo.ui.CoinGeckoAppBar
 import com.karan.coingecko.demo.ui.MultiPreview
 import com.karan.coingecko.demo.ui.auth.screens.LoginState
 import com.karan.flow.demo.R
-import kotlinx.coroutines.launch
 
 @Composable
 internal fun TopCoinsRoute(
     topCoinsViewModel: TopCoinsViewModel = hiltViewModel(),
     authState: State<LoginState>,
-    navigateToLogin: () -> Unit
+    navigateToLogin: () -> Unit,
+    navigateToCoinDetail: (String) -> Unit
 ) {
     val coinData by topCoinsViewModel.coinData.collectAsStateWithLifecycle()
     AuthenticatedContentOrLogin(authState, navigateToLogin) {
         TopCoinsScreen(
             coinState = coinData,
             topCoinsViewModel::sort,
+            navigateToCoinDetail
         )
     }
 }
+
 @Composable
 internal fun TopCoinsScreen(
     coinState: TopCoinsUiState,
-    sort: (TopCoinsViewModel.SortingMode) -> Unit = {}
+    sort: (TopCoinsViewModel.SortingMode) -> Unit = {},
+    navigateToCoinDetail: (String) -> Unit
 ) {
-    Scaffold(topBar = {
-        CoinGeckoAppBar()
-    }) { padding ->
+    Scaffold() { padding ->
         Box(modifier = Modifier.padding(padding)) {
             when (coinState) {
                 is TopCoinsUiState.Success -> {
-                    CoinList(coinState, sort)
+                    CoinList(coinState, sort, navigateToCoinDetail)
                 }
                 is TopCoinsUiState.Loading -> {
                     CoinLoading()
@@ -85,6 +87,7 @@ internal fun TopCoinsScreen(
 fun CoinList(
     coinState: TopCoinsUiState.Success,
     sort: (TopCoinsViewModel.SortingMode) -> Unit,
+    navigateToCoinDetail: (String) -> Unit,
 ) {
     val listState = rememberLazyListState()
     LazyColumn(state = listState) {
@@ -92,7 +95,7 @@ fun CoinList(
             ListHeader(sort = sort)
         }
         items(coinState.feed.coinListDashboard, key = { it.id }) {
-            CoinRow(itemScope = it)
+            CoinRow(itemScope = it, navigateToCoinDetail)
         }
     }
 }
@@ -135,22 +138,18 @@ internal fun ListHeader(
             .fillMaxWidth()
             .background(MaterialTheme.colors.background)
             .padding(10.dp),
+        horizontalArrangement = Arrangement.SpaceAround
     ) {
         StickyHeaderText(
-            title = "Coin",
-            modifier = Modifier
-                .width(120.dp)
-                .padding(start = 10.dp),
+            title = "Coinas",
             onClick = { sort(TopCoinsViewModel.SortingMode.NAME_ASC) },
         )
         StickyHeaderText(
             title = "Price(AUD)",
-            modifier = Modifier.width(100.dp),
             onClick = { sort(TopCoinsViewModel.SortingMode.PRICE_ASC) },
         )
         StickyHeaderText(
             title = "Change(24 hr)",
-            modifier = Modifier.fillMaxWidth(),
         )
     }
 }
@@ -159,20 +158,16 @@ internal fun ListHeader(
 @Composable
 internal fun StickyHeaderText(
     title: String,
-    modifier: Modifier,
+    modifier: Modifier = Modifier,
     textStyle: TextStyle = LocalTextStyle.current,
     onClick: () -> Unit = { }
 ) {
-    val cScope = rememberCoroutineScope()
     val style =
         textStyle.copy(MaterialTheme.colors.onBackground)
-    Row(horizontalArrangement = Arrangement.End,
+    Row(horizontalArrangement = Arrangement.SpaceBetween,
         modifier = Modifier.clickable {
-            cScope.launch {
-            }
-
-        onClick()
-    }) {
+            onClick()
+        }) {
         Text(
             text = title,
             modifier = modifier,
@@ -181,71 +176,37 @@ internal fun StickyHeaderText(
     }
 }
 
+@SuppressLint("UnusedTransitionTargetStateParameter")
 @OptIn(ExperimentalLayoutApi::class)
 @Composable
-internal fun CoinRow(itemScope: Coin) {
+internal fun CoinRow(itemScope: Coin, navigateToCoinDetail: (String) -> Unit) {
+    val coinNameContentDesc = stringResource(id = R.string.coin_name, itemScope.name)
+    val coinPriceDesc = stringResource(id = R.string.coin_price, itemScope.price)
+
     Row(
         modifier = Modifier
-            .semantics(mergeDescendants = true) {  }
+            .semantics(mergeDescendants = true) { }
             .fillMaxWidth()
-            .padding(10.dp),
-        horizontalArrangement = Arrangement.SpaceBetween
-    ) {
-        Row(
-            verticalAlignment = Alignment.CenterVertically,
+            .padding(20.dp)
+            .clickable {
+                navigateToCoinDetail(itemScope.id.toString())
+            },
+        horizontalArrangement = Arrangement.SpaceBetween,
+        verticalAlignment = Alignment.CenterVertically,
+
         ) {
-            CoinImageResource(headerImageUrl = itemScope.imageURL)
-            Text(
-                text = itemScope.name,
-                modifier = Modifier
-                    .padding(10.dp)
-                    .width(50.dp)
-                    .semantics { this.contentDescription = "Coin Name: ${itemScope.name}" },
+        CoinImageResource(headerImageUrl = itemScope.imageURL)
 
-                )
-            Text(
-                text = itemScope.price,
-                style = TextStyle(textAlign = TextAlign.End),
-                modifier = Modifier
-                    .padding(10.dp)
-                    .width(80.dp)
-                    .semantics { this.contentDescription = ",price is $${itemScope.price}" },
-            )
+        CoinText(title = itemScope.name, contentDescription = coinNameContentDesc)
 
-        }
-        Row(
-            horizontalArrangement = Arrangement.Center,
-            verticalAlignment = Alignment.CenterVertically,
-            modifier = Modifier
-                .width(80.dp)
-                .height(30.dp)
-                .clip(CircleShape)
-                .background(
-                    color =
-                    if (itemScope.isPositiveChange) colorResource(id = R.color.green_90)
-                    else colorResource(id = R.color.red_90)
-                )
-            ) {
-            Text(
-                text = itemScope.change24hr.toString() + "%",
-                modifier = Modifier.padding(5.dp)
-                    .semantics {
-                        this.contentDescription =  if (itemScope.isPositiveChange)
-                            "Last 24 hour change is Positive, %${itemScope.change24hr}" else
-                            "Last 24 hour change is Negative, %${itemScope.change24hr}"}
-                , style = TextStyle(
-                    color = Color.White, fontSize = 10.sp
-                )
-            )
-            Icon(
-                tint = Color.White,
-                imageVector = if (itemScope.isPositiveChange)
-                    Icons.Outlined.KeyboardArrowUp else
-                    Icons.Outlined.KeyboardArrowDown,
-                contentDescription = null
-            )
-        }
-        Icon(imageVector = Icons.Outlined.FavoriteBorder, contentDescription = "Tap to add this coin to favourites", modifier = Modifier.clickable { Unit })
+        CoinText(title = itemScope.price, contentDescription = coinPriceDesc)
+
+        CoinPriceChange(
+            change24Hour = itemScope.change24hr.toString(),
+            isPositiveChange = itemScope.isPositiveChange
+        )
+
+        CoinAddToFav()
     }
 }
 
@@ -265,8 +226,79 @@ internal fun CoinImageResource(
             .height(40.dp),
         contentScale = ContentScale.Fit,
         model = headerImageUrl,
-        contentDescription = "Coin Image", // decorative image
+        contentDescription = null, // decorative image
     )
+}
+
+@Composable
+internal fun CoinText(
+    title: String, contentDescription: String
+) {
+    Text(
+        text = title,
+        modifier = Modifier
+            .padding(10.dp)
+            .width(80.dp)
+            .semantics { this.contentDescription = contentDescription },
+    )
+}
+
+@Composable
+internal fun CoinPriceChange(
+    change24Hour: String,
+    isPositiveChange: Boolean
+) {
+    val change =
+        stringResource(id = R.string.hour_24_positive_change, change24Hour)
+    Row(
+        horizontalArrangement = Arrangement.Center,
+        verticalAlignment = Alignment.CenterVertically,
+        modifier = Modifier
+            .width(80.dp)
+            .height(30.dp)
+            .clip(CircleShape)
+            .background(
+                color = if (isPositiveChange) colorResource(id = R.color.green_90)
+                else colorResource(id = R.color.red_90)
+            )
+    ) {
+
+        Text(
+            text = "$change24Hour%",
+            modifier = Modifier
+                .padding(5.dp)
+                .semantics {
+                    this.contentDescription = change
+
+                }, style = TextStyle(
+                color = Color.White, fontSize = 10.sp
+            )
+        )
+        Icon(
+            tint = Color.White,
+            imageVector = if (isPositiveChange)
+                Icons.Outlined.KeyboardArrowUp else
+                Icons.Outlined.KeyboardArrowDown,
+            contentDescription = null
+        )
+    }
+}
+
+@Composable
+fun CoinAddToFav() {
+    val checkedState = remember { mutableStateOf(false) }
+
+    IconToggleButton(
+        checked = checkedState.value,
+        onCheckedChange = {
+            checkedState.value = !checkedState.value
+        },
+    ) {
+        Icon(
+            imageVector = if (checkedState.value) Icons.Filled.Favorite else Icons.Filled.FavoriteBorder,
+            contentDescription = stringResource(id = R.string.add_to_fav),
+        )
+    }
 }
 
 @Composable
@@ -281,7 +313,8 @@ fun TopCoinsScreenPreview() {
                 )
             )
         ),
-    )
+        navigateToCoinDetail = { },
+        )
 }
 
 

@@ -21,9 +21,7 @@ internal fun FavouritesRoute() {
 
 @Composable
 internal fun FavouritesScreen() {
-    Scaffold(topBar = {
-        CoinGeckoAppBar()
-    }) { padding ->
+    Scaffold() { padding ->
         Column(
             modifier = Modifier
                 .padding(padding)

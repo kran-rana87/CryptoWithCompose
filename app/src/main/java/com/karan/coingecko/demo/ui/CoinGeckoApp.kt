@@ -17,21 +17,27 @@ import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import androidx.navigation.NavDestination
+import androidx.navigation.NavDestination.Companion.hierarchy
 import androidx.navigation.NavGraph.Companion.findStartDestination
 import androidx.navigation.NavHostController
+import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
+import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
+import androidx.navigation.navArgument
 import com.karan.coingecko.demo.navigation.CoinGeckoGraphs.TOP_COINS_GRAPH
 import com.karan.coingecko.demo.navigation.CoinGeckoNavigationActions
 import com.karan.coingecko.demo.ui.auth.navigation.authScreenGraph
 import com.karan.coingecko.demo.ui.auth.screens.LoginState
+import com.karan.coingecko.demo.ui.dashboard.coinDetail.screens.CoinDetail
 import com.karan.coingecko.demo.ui.dashboard.favorites.navigation.favourites
 import com.karan.coingecko.demo.ui.dashboard.favorites.navigation.favouritesGraph
 import com.karan.coingecko.demo.ui.dashboard.settings.navigation.settings
 import com.karan.coingecko.demo.ui.dashboard.settings.navigation.settingsGraph
-import com.karan.coingecko.demo.ui.dashboard.topcoins.navigation.topCoinGraph
-import com.karan.coingecko.demo.ui.dashboard.topcoins.navigation.topCoins
+import com.karan.coingecko.demo.ui.dashboard.topcoins.navigation.*
+import com.karan.coingecko.demo.ui.dashboard.topcoins.navigation.coinIdArgs
 
 
 @Composable
@@ -59,6 +65,9 @@ fun MainNavHost(
     navigationAction: CoinGeckoNavigationActions,
 ) {
     Scaffold(
+       topBar = {
+           CoinGeckoAppBar()
+       },
         backgroundColor = MaterialTheme.colors.background,
         bottomBar = {
             if (authState.value == LoginState.LoggedIn)
@@ -80,9 +89,23 @@ fun MainNavHost(
                     navigateToDashboard = navigationAction.navigateToDashboard
                 )
 
-                topCoinGraph(authState = authState) {
-                    navigationAction.navigateToLogin()
-                }
+                topCoinGraph(
+                    authState = authState,
+                    navigateToLogin = navigationAction.navigateToLogin,
+                    navigateToCoinDetails = navController::navigateToCoinDetails,
+                            nestedGraphs = {
+                                composable(
+                                    route = coinDetail,
+                                    arguments = listOf(
+                                        navArgument(coinIdArgs) { type = NavType.StringType },
+                                    )
+                                ) {
+                                    CoinDetail(
+                                        it.arguments?.getString(coinIdArgs)
+                                    )
+                                }
+                    },
+                )
 
                 favouritesGraph()
 
@@ -93,6 +116,14 @@ fun MainNavHost(
         }
     }
 }
+
+
+private fun NavDestination?.isTopLevelDestinationInHierarchy(destination: NavItem) =
+    this?.hierarchy?.any {
+        it.route?.contains(destination.route, true) ?: false
+    } ?: false
+
+
 
 @Composable
 fun CoinGeckoBottomBar(navController: NavHostController) {
@@ -112,11 +143,11 @@ fun CoinGeckoBottomBar(navController: NavHostController) {
             .padding(10.dp),
         backgroundColor = MaterialTheme.colors.primarySurface
     ) {
-        topLevelDestinations.forEach { navItem ->
-            val selected = currentRoute == navItem.route
+        topLevelDestinations.forEachIndexed { position,navItem ->
+            val selected =  navBackStackEntry?.destination?.isTopLevelDestinationInHierarchy(navItem)
             BottomNavigationItem(
                 alwaysShowLabel = false,
-                selected = selected,
+                selected = selected?:false,
                 onClick = {
                     navController.navigate(navItem.route) {
                         popUpTo(navController.graph.findStartDestination().id) {
@@ -133,7 +164,7 @@ fun CoinGeckoBottomBar(navController: NavHostController) {
                     Icon(
                         navItem.icon,
                         contentDescription = navItem.title,
-                        tint = if (selected)
+                        tint = if (selected == true)
                             MaterialTheme.colors.secondaryVariant
                         else Color.Gray
                     )
@@ -143,7 +174,7 @@ fun CoinGeckoBottomBar(navController: NavHostController) {
                         navItem.title,
                         style = TextStyle(
                             color =
-                            if (selected)
+                            if (selected == true)
                                 MaterialTheme.colors.secondaryVariant
                             else Color.Gray
                         )

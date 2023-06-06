@@ -1,0 +1,7 @@
+<resources>
+    <string name="add_to_fav">Add to Favourites</string>
+    <string name="hour_24_positive_change">Last 24 hour change is, %1$s \%%</string>
+    <string name="coin_name">Coin name is %1$s</string>
+    <string name="coin_price">price is $ %1$s</string>
+
+</resources>
