@@ -21,8 +21,6 @@ class TopCoinsViewModel @Inject constructor(
 
 
     private val _currentSortingModeFlow = MutableStateFlow(SortingMode.MARKET_DESC)
-    val currentSortingModeFlow = _currentSortingModeFlow.asStateFlow()
-
 
     val coinData = coinData().combine(_currentSortingModeFlow) { data, sortingMethod ->
         when (data) {

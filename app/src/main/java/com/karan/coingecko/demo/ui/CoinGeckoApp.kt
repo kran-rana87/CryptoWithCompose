@@ -65,9 +65,9 @@ fun MainNavHost(
     navigationAction: CoinGeckoNavigationActions,
 ) {
     Scaffold(
-       topBar = {
-           CoinGeckoAppBar()
-       },
+        topBar = {
+            CoinGeckoAppBar()
+        },
         backgroundColor = MaterialTheme.colors.background,
         bottomBar = {
             if (authState.value == LoginState.LoggedIn)
@@ -92,19 +92,7 @@ fun MainNavHost(
                 topCoinGraph(
                     authState = authState,
                     navigateToLogin = navigationAction.navigateToLogin,
-                    navigateToCoinDetails = navController::navigateToCoinDetails,
-                            nestedGraphs = {
-                                composable(
-                                    route = coinDetail,
-                                    arguments = listOf(
-                                        navArgument(coinIdArgs) { type = NavType.StringType },
-                                    )
-                                ) {
-                                    CoinDetail(
-                                        it.arguments?.getString(coinIdArgs)
-                                    )
-                                }
-                    },
+                    navigateToCoinDetails = navigationAction::navigateToCoinDetails,
                 )
 
                 favouritesGraph()
@@ -122,7 +110,6 @@ private fun NavDestination?.isTopLevelDestinationInHierarchy(destination: NavIte
     this?.hierarchy?.any {
         it.route?.contains(destination.route, true) ?: false
     } ?: false
-
 
 
 @Composable
@@ -143,11 +130,11 @@ fun CoinGeckoBottomBar(navController: NavHostController) {
             .padding(10.dp),
         backgroundColor = MaterialTheme.colors.primarySurface
     ) {
-        topLevelDestinations.forEachIndexed { position,navItem ->
-            val selected =  navBackStackEntry?.destination?.isTopLevelDestinationInHierarchy(navItem)
+        topLevelDestinations.forEachIndexed { position, navItem ->
+            val selected = navBackStackEntry?.destination?.isTopLevelDestinationInHierarchy(navItem)
             BottomNavigationItem(
                 alwaysShowLabel = false,
-                selected = selected?:false,
+                selected = selected ?: false,
                 onClick = {
                     navController.navigate(navItem.route) {
                         popUpTo(navController.graph.findStartDestination().id) {

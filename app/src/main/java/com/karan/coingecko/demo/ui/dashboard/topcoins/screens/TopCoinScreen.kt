@@ -47,13 +47,15 @@ internal fun TopCoinsRoute(
     topCoinsViewModel: TopCoinsViewModel = hiltViewModel(),
     authState: State<LoginState>,
     navigateToLogin: () -> Unit,
-    navigateToCoinDetail: (String) -> Unit
+    coinDetailRoute: String,
+    navigateToCoinDetail: (String, String) -> Unit
 ) {
     val coinData by topCoinsViewModel.coinData.collectAsStateWithLifecycle()
     AuthenticatedContentOrLogin(authState, navigateToLogin) {
         TopCoinsScreen(
             coinState = coinData,
             topCoinsViewModel::sort,
+            coinDetailRoute,
             navigateToCoinDetail
         )
     }
@@ -63,17 +65,20 @@ internal fun TopCoinsRoute(
 internal fun TopCoinsScreen(
     coinState: TopCoinsUiState,
     sort: (TopCoinsViewModel.SortingMode) -> Unit = {},
-    navigateToCoinDetail: (String) -> Unit
+    coinDetailRoute: String,
+    navigateToCoinDetail: (String, String) -> Unit
 ) {
     Scaffold() { padding ->
         Box(modifier = Modifier.padding(padding)) {
             when (coinState) {
                 is TopCoinsUiState.Success -> {
-                    CoinList(coinState, sort, navigateToCoinDetail)
+                    CoinList(coinState, sort, coinDetailRoute, navigateToCoinDetail)
                 }
+
                 is TopCoinsUiState.Loading -> {
                     CoinLoading()
                 }
+
                 else -> {
                     CoinError()
                 }
@@ -87,7 +92,8 @@ internal fun TopCoinsScreen(
 fun CoinList(
     coinState: TopCoinsUiState.Success,
     sort: (TopCoinsViewModel.SortingMode) -> Unit,
-    navigateToCoinDetail: (String) -> Unit,
+    coinDetailRoute: String,
+    navigateToCoinDetail: (String, String) -> Unit,
 ) {
     val listState = rememberLazyListState()
     LazyColumn(state = listState) {
@@ -95,7 +101,7 @@ fun CoinList(
             ListHeader(sort = sort)
         }
         items(coinState.feed.coinListDashboard, key = { it.id }) {
-            CoinRow(itemScope = it, navigateToCoinDetail)
+            CoinRow(itemScope = it, coinDetailRoute, navigateToCoinDetail)
         }
     }
 }
@@ -177,9 +183,12 @@ internal fun StickyHeaderText(
 }
 
 @SuppressLint("UnusedTransitionTargetStateParameter")
-@OptIn(ExperimentalLayoutApi::class)
 @Composable
-internal fun CoinRow(itemScope: Coin, navigateToCoinDetail: (String) -> Unit) {
+internal fun CoinRow(
+    itemScope: Coin,
+    coinDetailRoute: String,
+    navigateToCoinDetail: (String, String) -> Unit
+) {
     val coinNameContentDesc = stringResource(id = R.string.coin_name, itemScope.name)
     val coinPriceDesc = stringResource(id = R.string.coin_price, itemScope.price)
 
@@ -189,7 +198,7 @@ internal fun CoinRow(itemScope: Coin, navigateToCoinDetail: (String) -> Unit) {
             .fillMaxWidth()
             .padding(20.dp)
             .clickable {
-                navigateToCoinDetail(itemScope.id.toString())
+                navigateToCoinDetail(coinDetailRoute, itemScope.id.toString())
             },
         horizontalArrangement = Arrangement.SpaceBetween,
         verticalAlignment = Alignment.CenterVertically,
@@ -313,8 +322,9 @@ fun TopCoinsScreenPreview() {
                 )
             )
         ),
-        navigateToCoinDetail = { },
-        )
+        coinDetailRoute = "",
+        navigateToCoinDetail = { _, _ -> },
+    )
 }
 
 

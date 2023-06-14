@@ -1,5 +1,6 @@
 package com.karan.coingecko.demo.navigation
 
+import androidx.navigation.NavController
 import androidx.navigation.NavHostController
 import com.karan.coingecko.demo.navigation.CoinGeckoGraphs.AUTH_ROUTE_GRAPH
 import com.karan.coingecko.demo.navigation.CoinGeckoGraphs.TOP_COINS_GRAPH
@@ -13,7 +14,7 @@ object CoinGeckoGraphs {
     const val FAVOURITES_GRAPH = "favourites_graph"
 }
 
-class CoinGeckoNavigationActions(navController: NavHostController) {
+class CoinGeckoNavigationActions(val navController: NavHostController) {
 
     val navigateToLogin: () -> Unit = {
         navController.navigate(AUTH_ROUTE_GRAPH) {
@@ -36,6 +37,12 @@ class CoinGeckoNavigationActions(navController: NavHostController) {
 
     val navigateTeForgotPassword: () -> Unit = {
         navController.navigate(forgotPassword) {
+        }
+    }
+
+    fun navigateToCoinDetails(initialRoute:String,coinId: String) {
+        navController.navigate("$initialRoute/$coinId") {
+            launchSingleTop = true
         }
     }
 }
