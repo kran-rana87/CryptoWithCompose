@@ -34,15 +34,14 @@ DI is done using Andorid's [Hilt] Lib and each module has its own `di` package f
 
 It uses App Modularization strategies and following are some modules of the app.
 
-`app` - Currently it holds the UI compoenents but plan is to move the Features to a seperate Feature module
+`app` - Currently it holds the UI components but plan is to move the Features to a separate Feature module
 
 `data-local` - Handles the Local Data using Android DataStore.
 
-`domain` - Holds the Use cases (Currently not in use but will be updated in the next release) and Domain Models 
+`domain` - Holds the Domain Models 
 
 `data-network` - Holds the Network Responses DTO, Networking Service (i.e Retrofit), various respositories used in the app,
-                 Mappers for converting network resposne to the domain specific one(once the use cases are implemented mappers will move to the 
-                 Domian layer and hence removing the depdency of Domain Models on the data layer)
+                 Mappers for converting network responses to the domain specific one
 
 `common` - Some Common Utility functions and Constants
 
